@@ -9,6 +9,11 @@ import NewsScreen from './screens/NewsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import TechniciansScreen from './screens/techniciansScreen';
 import SoftwaresScreen from './screens/SoftwareScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+import ProductDetailScreen from './screens/ProductDetailScreen';
+import CategoryScreen from './screens/CategoryDetailScreen';
+import TechnicianDetailScreen from './screens/TechnicianDetailScreen';
+import NewsDetailScreen from './screens/NewsDetailScreen';
 
 //Screen names
 const homeName = "Home";
@@ -16,8 +21,13 @@ const newsName = "News";
 const technicianName = "Technicians"
 const settingsName = "Settings";
 const softwaresName = 'Softwares'
+const ProductDetail = 'ProductDetail'
+const CetegoryName = 'Category'
+const TechnicianDetail = 'TechnicianDetail'
+const NewsDetail = 'NewsDetail'
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator()
 
 function MainContainer() {
   return (
@@ -40,7 +50,7 @@ function MainContainer() {
             } else if (rn === technicianName){
                 iconName = focused? 'build': 'build-outline'
             } else if (rn === softwaresName){
-                iconName = focused? 'apps': 'apps-outline'
+                iconName = focused? 'download': 'download-outline'
             }
 
             // You can return any component that you like here!
@@ -58,8 +68,26 @@ function MainContainer() {
         <Tab.Screen name={technicianName} component={TechniciansScreen} />
         <Tab.Screen name={newsName} component={NewsScreen} />
         <Tab.Screen name={softwaresName} component={SoftwaresScreen} />
-        <Tab.Screen name={settingsName} component={SettingsScreen} />
-
+        <Tab.Screen name={CetegoryName} component={CategoryScreen} 
+          options={{
+            tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
+        <Tab.Screen name={ProductDetail} component={ProductDetailScreen} 
+          options={{
+            // tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
+        <Tab.Screen name={TechnicianDetail} component={TechnicianDetailScreen} 
+          options={{
+            // tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
+        <Tab.Screen name={NewsDetail} component={NewsDetailScreen} 
+          options={{
+            // tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
