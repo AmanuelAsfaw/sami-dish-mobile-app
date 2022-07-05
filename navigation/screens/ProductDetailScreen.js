@@ -41,7 +41,7 @@ const ProductDetailScreen = ({navigation, route}) => {
         marginTop: 20
       }}>
       <View style={style.header}>
-        <Icon name="arrow-back" size={28} onPress={() => navigation.goBack()} />
+        <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
         <View style={{
                     width: 60,
                     height: 60,
