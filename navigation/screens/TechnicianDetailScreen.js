@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import ProductCard from '../../components/ProductCard';
 import products from '../../sample-data/products';
 import { FlatList } from 'react-native-gesture-handler';
@@ -27,11 +27,18 @@ export default function TechnicianDetailScreen({ navigation }) {
         }
         call(args).catch(console.error)  
     }
+    const back_to = () => {
+
+        console.log('back to');
+    }
 
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <TouchableOpacity onPress={back_to()} activeOpacity={.5}>
+                    <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}} onPress={() => Alert.alert('text')}>Sami-Dish</Text>
+                </TouchableOpacity>
+                
                 <View style={{
                     width: 60,
                     height: 60,
