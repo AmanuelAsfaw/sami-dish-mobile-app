@@ -10,10 +10,11 @@ const width = Dimensions.get('screen').width
 
 const data = products
 const app_logo = require('../../assets/app.png')
-export default function CategoryScreen({ navigation }) {
+export default function CategoryScreen({ navigation, route }) {
     const category_list = ['All', 'Cable', 'Dish', 'Tv', 'Reciever','one', 'Cable', 'Dish', 'Tv', 'Reciever','two', 'Cable', 'Dish', 'Tv', 'Reciever']
-    const [categoryIndex, setCategoryIndex] = React.useState(0) 
+    const [categoryIndex, setCategoryIndex] = React.useState(route.categoryIndex) 
 
+    console.log(categoryIndex);
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
       }, [navigation])
@@ -49,16 +50,16 @@ export default function CategoryScreen({ navigation }) {
                     </View>
                     <View>
                     <View style={{
-                            height: 25,
-                            width: 25,
+                            height: 35,
+                            width: 35,
                             backgroundColor: COLORS.green,
-                            borderRadius: 5,
+                            borderRadius: 2.5,
                             justifyContent: 'center',
                             alignItems: 'center',
                             alignContent: 'center',
                             alignSelf:'flex-end'
                         }}>
-                            <Text style={{ fontSize: 22, color: COLORS.white, fontWeight: 'bold'}}>+</Text>
+                            <Icon name='shopping-cart' color={COLORS.white} size={30}/>
                         </View>
                     </View>
                     </View>
