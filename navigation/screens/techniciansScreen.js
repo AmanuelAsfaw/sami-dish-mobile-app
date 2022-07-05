@@ -63,7 +63,7 @@ export default function TechniciansScreen({ navigation }) {
                             alignContent: 'center',
                             alignSelf:'flex-end'
                         }}>
-                            <Text style={{ fontSize: 22, color: COLORS.white, fontWeight: 'bold'}}>+</Text>
+                            <Icon name='phone' color={COLORS.white} size={20}/>
                         </View>
                     </View>
                     </View>
