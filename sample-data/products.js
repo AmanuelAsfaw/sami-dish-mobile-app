@@ -64,8 +64,8 @@ const product_list = [
         about: 'እስካሁን በትክክል የተመዘገቡ ዲሽ ሰሪዎች ናቸው እኛ ምንገልገው 1000 በላይ ስለሆነ አሁንም ያልተመዘገባቹ ከላይ ባለው ሊንክ ተመዝገቡ '
     },
     {
-        name : 'Product 9',
-        description: 'product 9 desc',
+        name : 'ሰሀን DISH',
+        description: 'ሰሀን DISH  ',
         category : 'TV',
         img: require('../assets/products/product1.jpg'),
         price: 43,
