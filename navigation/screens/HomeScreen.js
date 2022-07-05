@@ -18,19 +18,6 @@ export default function HomeScreen({ navigation }) {
         navigation.setOptions({headerShown: false});
       }, [navigation])
 
-    const CategoryList = () => {
-        return (
-            <View style={style.categoryContainer}>
-                <ScrollView horizontal={true} style={{flex: 1}} showsHorizontalScrollIndicator={false}>
-                    {category_list.map((item,index) => (
-                        <TouchableOpacity key={index} onPress={() => setCategoryIndex(index)} activeOpacity={.2}>
-                            <Text key={index} style={[style.categoryText, categoryIndex == index && style.categoryTextSelected]}>{item}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            </View>
-        )
-    }
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
@@ -53,11 +40,11 @@ export default function HomeScreen({ navigation }) {
                     <Icon name='sort' size={30} color={COLORS.white}/>
                 </View>
             </View>
-            <CategoryList/>
-            <View style={{flex: 0, flexDirection: 'row', marginLeft: 5}}>
+            {/* <CategoryList/> */}
+            <View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 20}}>
                 <ScrollView horizontal={true}>
                     {data.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={() => navigation.navigate('Category', {product:item})}>
+                        <TouchableOpacity key={index} onPress={() => navigation.navigate('Category', {product:item, categoryIndex: index})}>
                             <View style={style.productCard}>
                                 <Text style={{ paddingLeft: 20, paddingTop: 20, fontWeight: '300', color: COLORS.white, fontSize: 22}}>{item.category}</Text>
                                 <Text style={{ fontSize: 28, fontWeight: 'bold', paddingLeft: 40, color: COLORS.white}}>{item.name}</Text>
@@ -139,8 +126,8 @@ const style = StyleSheet.create({
     productCard: {
         backgroundColor: COLORS.green,
         width,
-        maxHeight: 450,
-        minHeight: 450,
+        maxHeight: 500,
+        minHeight: 500,
         marginBottom: 10 ,
         marginHorizontal: 5,
         borderRadius: 10
