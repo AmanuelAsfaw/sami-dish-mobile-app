@@ -7,6 +7,10 @@ import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import call from 'react-native-phone-call';
 
+import LottieView from 'lottie-react-native';
+
+import RNDownloadButton from 'react-native-download-button'
+
 const width = Dimensions.get('screen').width - 40
 
 const data = news_list
@@ -31,63 +35,73 @@ export default function SoftwaresScreen({ navigation }) {
     const ShowDownloadIicon = ({id}) => {
         if(id % 3 == 0){
             return (
-                <Icon name='pending' size={40} color={COLORS.white} style={{borderRadius: 10}}/>
+                <LottieView source={require('../../assets/98657-loader.json')} 
+                autoPlay loop size={100} autoSize={true} style={{width: 20, color: COLORS.white}} color={COLORS.white}/>
             )
         } else if (id % 2 === 0){
             return(
-                <Icon name='save' size={40} color={COLORS.white} style={{borderRadius: 10}}/>
+                <Icon name='check-circle' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
             )
         } else{
             return(
-                <Icon name='get-app' size={40} color={COLORS.white} style={{borderRadius: 10}}/>
+                <Icon name='get-app' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
             )
         }
     }
     const Card = ({news}) => {
         if(news.id == expandSoft){
             return(
-                <TouchableOpacity style={{ flex: 1, backgroundColor: COLORS.light, marginBottom: 5, justifyContent: 'center', alignItems: 'center'}}
-                    onPress={() => {                        
-                        setExpandSoft(null)
-                    }}>
+                <View style={{ flex: 1, backgroundColor: COLORS.light, paddingTop: 90, marginBottom: 5, justifyContent: 'center', alignItems: 'center'}}
+                    >
                     <View style={{ 
                         maxHeight: 150, 
                         backgroundColor: COLORS.dark,
                         alignItems: 'center', 
                         justifyContent: 'center'
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width -70}} source={news.img}/>
+                        <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width -50}} source={news.img}/>
                     </View>  
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 0, textAlign: 'center', marginVertical: 20}}>{news.name}</Text>
                         <Text style={{fontSize:11, marginRight: 20, textAlign: 'center'}}>{news.about}</Text>        
-                    <View style={{backgroundColor: COLORS.green, alignItems: 'flex-end', marginRight: 20, alignSelf: 'flex-end', marginVertical: 10, borderRadius: 40, padding: 5}}>
-                        <ShowDownloadIicon id={news.id}/>
-                    </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
+                            <TouchableOpacity onPress={() => setExpandSoft(null)}>
+                                <Icon name='expand-less' size={50} color={COLORS.green}/>
+                            </TouchableOpacity>
+                            <View style={{backgroundColor: COLORS.green, marginRight: 0, marginVertical: 10, borderRadius: 40, padding: 5}}>
+                                <ShowDownloadIicon id={news.id}/>
+                            </View>
+                        </View>
                     </View>   
-                </TouchableOpacity>
+                </View>
             )
         }
         else{
             return (
-                <TouchableOpacity style={{ flex: 1, flexDirection: 'row', backgroundColor: COLORS.light, marginBottom: 5}}
-                    onPress={() => setExpandSoft(news.id)}>
+                <View style={{ flex: 1, flexDirection: 'row', paddingVertical: 10, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
+                    >
                     <View style={{ 
                         maxHeight: 100, 
-                        backgroundColor: COLORS.dark,
+                        // backgroundColor: COLORS.dark,
+                        borderRadius: 15,
                         alignItems: 'center', 
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width/2 -70}} source={news.img}/>
+                        <Image style={{ flex: 1, resizeMode: 'contain',maxWidth: 80}} source={news.img}/>
                     </View>  
                     <View style={{paddingHorizontal: 10}}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 90}}>{news.name} Softwares</Text>
-                        <Text numberOfLines={4} style={{fontSize:11, marginRight: 85}}>{news.about}</Text>        
-                    <View style={{backgroundColor: COLORS.green, alignItems: 'flex-end', marginRight: 90, alignSelf: 'flex-end', marginVertical: 10, borderRadius: 40, padding: 5}}>
-                        <ShowDownloadIicon id={news.id}/>
-                    </View>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 90}}>{news.name} Softwares</Text>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
+                                <View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 90, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
+                                    <ShowDownloadIicon id={news.id}/>
+                                </View>
+                                <TouchableOpacity onPress={() => setExpandSoft(news.id)}>
+                                    <Icon name='expand-more' size={50} color={COLORS.green}/>
+                                </TouchableOpacity>
+                            </View>
+                            
                     </View>   
-                </TouchableOpacity>
+                </View>
             )
         }
     }
