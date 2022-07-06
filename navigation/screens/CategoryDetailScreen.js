@@ -34,7 +34,7 @@ export default function CategoryScreen({ navigation, route }) {
     }
     const Card = ({product}) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)}>
+            <View>
                 <View style={style.card}>
                     <View style={{ height: 100, alignItems: 'center'}}>
                         <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width/2 -70}} source={product.img}/>
@@ -49,7 +49,7 @@ export default function CategoryScreen({ navigation, route }) {
                         
                     </View>
                     <View>
-                    <View style={{
+                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={{
                             height: 35,
                             width: 35,
                             backgroundColor: COLORS.green,
@@ -60,11 +60,11 @@ export default function CategoryScreen({ navigation, route }) {
                             alignSelf:'flex-end'
                         }}>
                             <Icon name='shopping-cart' color={COLORS.white} size={30}/>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     </View>
                     
-            </TouchableOpacity>
+            </View>
         )
     }
     return (

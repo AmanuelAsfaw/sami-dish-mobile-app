@@ -37,7 +37,7 @@ export default function TechniciansScreen({ navigation }) {
 
     const Card = ({product}) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('TechnicianDetail', product)}>
+            <View>
                 <View style={style.card}>
                     <View style={{ height: 100, alignItems: 'center', borderRadius: 20}}>
                         <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width/2 -70, borderRadius: 100}} source={product.img}/>
@@ -53,9 +53,9 @@ export default function TechniciansScreen({ navigation }) {
                         
                     </View>
                     <View>
-                    <View style={{
-                            height: 25,
-                            width: 25,
+                    <TouchableOpacity onPress={() => navigation.navigate('TechnicianDetail', product)} style={{
+                            height: 35,
+                            width: 35,
                             backgroundColor: COLORS.green,
                             borderRadius: 5,
                             justifyContent: 'center',
@@ -63,12 +63,12 @@ export default function TechniciansScreen({ navigation }) {
                             alignContent: 'center',
                             alignSelf:'flex-end'
                         }}>
-                            <Icon name='phone' color={COLORS.white} size={20}/>
-                        </View>
+                            <Icon name='phone' color={COLORS.white} size={35}/>
+                        </TouchableOpacity>
                     </View>
                     </View>
                     
-            </TouchableOpacity>
+            </View>
         )
     }
     return (
@@ -186,7 +186,7 @@ const style = StyleSheet.create({
         borderRadius: 10
     },
     card: {
-        height: 255,
+        minHeight: 255,
         backgroundColor: COLORS.light,
         width: width/2 -30,
         marginHorizontal: 10,

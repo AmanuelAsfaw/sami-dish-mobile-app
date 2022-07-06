@@ -12,6 +12,8 @@ const app_logo = require('../../assets/app.png')
 const ProductDetailScreen = ({navigation, route}) => {
   const plant = route.params;
   const tg_username = 'namingishard' 
+  const [quantity, setQuantity] = React.useState(0)
+
 //   const image_list_ = image_list 
 
   React.useLayoutEffect(() => {
@@ -19,8 +21,8 @@ const ProductDetailScreen = ({navigation, route}) => {
   }, [navigation])
 
   const forwardToTelegram = useCallback(async() => {
-    const text = plant.name + ' \n'+ 'Quantity: '+2+'\n'+ 'Total Price: 200'
-    const url = "https://t.me/Alemseged/url?new&text=asd"
+    const text = plant.name + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(plant.price * quantity)
+    const url = "https://t.me/namingishard/url?new&text=asd"
     const url1 = "tg://msg?text="+text+"&to=@Alemseged"
     const supported = await Linking.canOpenURL(url)
     if(supported){
@@ -80,7 +82,7 @@ const ProductDetailScreen = ({navigation, route}) => {
                 fontWeight: 'bold',
                 fontSize: 16,
               }}>
-              ${plant.price}
+              {plant.price} ETB
             </Text>
           </View>
         </View>
@@ -106,20 +108,26 @@ const ProductDetailScreen = ({navigation, route}) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <View style={style.borderBtn}>
+              <TouchableOpacity style={style.borderBtn} 
+                onPress={() => {
+                  if(quantity > 0){
+                    setQuantity(quantity - 1)
+                  }
+                }}
+                disabled={ quantity > 0? false : true}>
                 <Text style={style.borderBtnText}>-</Text>
-              </View>
+              </TouchableOpacity>
               <Text
                 style={{
                   fontSize: 20,
                   marginHorizontal: 10,
                   fontWeight: 'bold',
                 }}>
-                1
+                {quantity}
               </Text>
-              <View style={style.borderBtn}>
+              <TouchableOpacity style={style.borderBtn} onPress={() => setQuantity(quantity+1)}>
                 <Text style={style.borderBtnText}>+</Text>
-              </View>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={style.buyBtn} onPress={() => forwardToTelegram()}>
