@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import call from 'react-native-phone-call';
 
 import LottieView from 'lottie-react-native';
+import * as FileSystem from 'expo-file-system'
 
 import RNDownloadButton from 'react-native-download-button'
 
@@ -19,24 +20,42 @@ const img = require('../../assets/yonatan.jpg')
 export default function SoftwaresScreen({ navigation }) {
     const [phone, setPhone] = React.useState('+251964359872')
     const [expandSoft, setExpandSoft] = React.useState(null)
+    const [downloadProgressPercent, setDownloadProgress] = React.useState(0)
 
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
       }, [navigation])
-
-    const forwardToCall = async () => {
-        const args = {
-            number: phone, // String value with the number to call
-            prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
-            skipCanOpen: true // Skip the canOpenURL check
-        }
-        call(args).catch(console.error)  
+    
+    const callback = downloadProgress => {
+        const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite
+        setDownloadProgress(progress)
     }
+    const DownloadSoftware = async () => {
+        FileSystem.makeDirectoryAsync('sami-dish')
+        const downloadResumable = FileSystem.createDownloadResumable(
+            'http://techslides.com/demos/sample-videos/small.mp4',
+            FileSystem.documentDirectory+ 'small.mp4',
+            {},
+            callback
+        )
+        try{
+            const data = await downloadResumable.downloadAsync()
+            console.log(data);
+            console.log('Finished downloading to ', data.uri);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const ShowDownloadIicon = ({id}) => {
         if(id % 3 == 0){
             return (
-                <LottieView source={require('../../assets/98657-loader.json')} 
-                autoPlay loop size={100} autoSize={true} style={{width: 20, color: COLORS.white}} color={COLORS.white}/>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <LottieView source={require('../../assets/98657-loader.json')} 
+                        autoPlay loop size={50} autoSize={true} 
+                        style={{width: 30, color: COLORS.white}} color={COLORS.white}/>
+                        <Text style={{paddingLeft: 10, color: COLORS.white, fontSize: 18}}>{(downloadProgressPercent * 100).toFixed(2)}%</Text>
+                </View>
             )
         } else if (id % 2 === 0){
             return(
@@ -44,10 +63,16 @@ export default function SoftwaresScreen({ navigation }) {
             )
         } else{
             return(
-                <Icon name='get-app' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
+                <TouchableOpacity onPress={() => {
+                    console.log('download start')
+                    DownloadSoftware()
+                }}>
+                    <Icon name='get-app' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
+                </TouchableOpacity>
             )
         }
     }
+
     const Card = ({news}) => {
         if(news.id == expandSoft){
             return(
@@ -65,12 +90,12 @@ export default function SoftwaresScreen({ navigation }) {
                         <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 0, textAlign: 'center', marginVertical: 20}}>{news.name}</Text>
                         <Text style={{fontSize:11, marginRight: 20, textAlign: 'center'}}>{news.about}</Text>        
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
-                            <TouchableOpacity onPress={() => setExpandSoft(null)}>
-                                <Icon name='expand-less' size={50} color={COLORS.green}/>
-                            </TouchableOpacity>
-                            <View style={{backgroundColor: COLORS.green, marginRight: 0, marginVertical: 10, borderRadius: 40, padding: 5}}>
-                                <ShowDownloadIicon id={news.id}/>
+                            <View style={{backgroundColor: COLORS.green, marginRight: 0, marginVertical: 10, borderRadius: 40, padding: 5, minWidth: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
+                                <ShowDownloadIicon id={news.id} />
                             </View>
+                            <TouchableOpacity onPress={() => setExpandSoft(null)}>
+                                <Icon name='expand-less' size={35} color={COLORS.green}/>
+                            </TouchableOpacity>
                         </View>
                     </View>   
                 </View>
@@ -92,11 +117,11 @@ export default function SoftwaresScreen({ navigation }) {
                     <View style={{paddingHorizontal: 10}}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 90}}>{news.name} Softwares</Text>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
-                                <View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 90, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
+                                <View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 0, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
                                     <ShowDownloadIicon id={news.id}/>
                                 </View>
-                                <TouchableOpacity onPress={() => setExpandSoft(news.id)}>
-                                    <Icon name='expand-more' size={50} color={COLORS.green}/>
+                                <TouchableOpacity onPress={() => setExpandSoft(news.id)} style={{justifyContent: 'flex-end'}}>
+                                    <Icon name='expand-more' size={35} color={COLORS.green}/>
                                 </TouchableOpacity>
                             </View>
                             
@@ -105,6 +130,7 @@ export default function SoftwaresScreen({ navigation }) {
             )
         }
     }
+
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
