@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions, Linking } from 'react-native';
 import ProductCard from '../../components/ProductCard';
 import { news_list } from '../../sample-data/products';
 import { FlatList } from 'react-native-gesture-handler';
@@ -8,11 +8,22 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import call from 'react-native-phone-call';
 
 import LottieView from 'lottie-react-native';
-import * as FileSystem from 'expo-file-system'
+
+import * as FileSystem from 'expo-file-system';
+
+import * as Permissions from 'expo-permissions';
+
+import * as MediaLibrary from 'expo-media-library';
+
+// import * as Permissions from "expo-permissions";
 
 import RNDownloadButton from 'react-native-download-button'
+import { downloadToFolder } from 'expo-file-dl';
+import axios from 'axios';
 
 const width = Dimensions.get('screen').width - 40
+
+const channelId = "DownloadInfo";
 
 const data = news_list
 const app_logo = require('../../assets/app.png')
@@ -27,24 +38,60 @@ export default function SoftwaresScreen({ navigation }) {
       }, [navigation])
     
     const callback = downloadProgress => {
-        const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite
+        const progress = 100*(downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite)
         setDownloadProgress(progress)
     }
+
+    async function getMediaLibraryPermissions() {
+        // await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    }
+    
+    async function getNotificationPermissions() {
+        // await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+    
     const DownloadSoftware = async () => {
-        FileSystem.makeDirectoryAsync('sami-dish')
-        const downloadResumable = FileSystem.createDownloadResumable(
-            'http://techslides.com/demos/sample-videos/small.mp4',
-            FileSystem.documentDirectory+ 'small.mp4',
-            {},
-            callback
-        )
-        try{
-            const data = await downloadResumable.downloadAsync()
-            console.log(data);
-            console.log('Finished downloading to ', data.uri);
-        } catch (e) {
-            console.log(e);
+        // const Permissions={}
+        const permission = await Permissions.askAsync(Permissions.MEDIA_LIBRARY)
+        const permission2 = await Permissions.askAsync(Permissions.MEDIA_LIBRARY_WRITE_ONLY)
+        if( permission.status != 'granted' && permission2.status != 'granted'){
+            console.log('media library permission not granted');
+            return;
         }
+        const filename = 'samid2.pdf'
+        const fileUri =  `${FileSystem.documentDirectory}${filename}`
+        const uri = 'https://sebrisat.com/wp-content/uploads/2020/03/TIGER-T8-HIGH-CLASS-V2flower_V3.8021557_20032020.bin'
+        const uri2 = 'http://techslides.com/demos/sample-videos/small.mp4'
+        // const down_file = await FileSystem.downloadAsync('http://www.soundczech.cz/temp/lorem-ipsum.pdf', `${FileSystem.documentDirectory}myDirectory/lorem-ipsum.pdf`)
+        //                     .then(({uri}) => Linking.openURL(uri))
+        
+        var response_ = null
+
+        axios.get('http://techslides.com/demos/sample-videos/small.mp4')
+            .then(function (response) {
+                console.log(response)
+                response_ = response
+            }).catch(function (error) {
+                console.log(error);
+            })
+        
+        const file_write = await FileSystem.writeAsStringAsync(filename, response_)
+        console.log(file_write)
+        // await downloadToFolder('http://www.soundczech.cz/temp/lorem-ipsum.pdf', filename, '../SamiFolder','sami-id')
+        
+        // const downloadedFile = await FileSystem.downloadAsync('https://sebrisat.com/wp-content/uploads/2020/03/TIGER-T8-HIGH-CLASS-V2flower_V3.8021557_20032020.bin', fileUri)
+
+        // try {
+        //     const asset = await MediaLibrary.createAssetAsync(downloadedFile.uri);
+        //     const album = await MediaLibrary.getAlbumAsync('Sami-Dish');
+        //     if (album == null) {
+        //       await MediaLibrary.createAlbumAsync('SamiDish', asset, false);
+        //     } else {
+        //       await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+        //     }
+        // } catch (e) {
+        //     console.log(e);
+        // }
     }
 
     const ShowDownloadIicon = ({id}) => {
@@ -63,9 +110,10 @@ export default function SoftwaresScreen({ navigation }) {
             )
         } else{
             return(
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity onPress={async() => {
                     console.log('download start')
-                    DownloadSoftware()
+                    await Linking.openURL('https://sebrisat.com/wp-content/uploads/2020/03/TIGER-T8-HIGH-CLASS-V2flower_V3.8021557_20032020.bin')
+                    // DownloadSoftware()
                 }}>
                     <Icon name='get-app' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
                 </TouchableOpacity>
