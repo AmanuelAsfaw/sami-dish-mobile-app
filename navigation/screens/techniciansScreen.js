@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions, Modal } from 'react-native';
 import ProductCard from '../../components/ProductCard';
 import { technicians_list } from '../../sample-data/products';
 import { FlatList } from 'react-native-gesture-handler';
@@ -16,7 +16,82 @@ export default function TechniciansScreen({ navigation }) {
     const [categoryIndex, setCategoryIndex] = React.useState(0) 
     const [filterVisible, setFilterVisible] = React.useState(false) 
     const [location, setLocation] = React.useState({ key: null, label: null}) 
+
+    const [modalVisible, setModalVisible] = React.useState(false)
+
     const options = [
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
+        {
+          key: 'Oromia',
+          label: 'Oromia',
+        },
+        {
+          key: 'Oromia-Adama',
+          label: 'Oromia-Adama',
+        },
+        {
+          key: 'Addis Ababa',
+          label: 'Addis Ababa',
+        },
         {
           key: 'Oromia',
           label: 'Oromia',
@@ -71,6 +146,16 @@ export default function TechniciansScreen({ navigation }) {
             </View>
         )
     }
+    const SearchItem = ({item}) => {
+        console.log('item -new '+item);
+        console.log(item);
+        console.log(item.index);
+        return (
+        <Text key={'region_city_'+item.index} style={{marginVertical: 5, backgroundColor: COLORS.white, 
+            borderRadius: 2, color: COLORS.green, borderColor: COLORS.green, 
+            borderWidth: 2, padding: 5}}>{item.item.label}</Text>
+        )
+    }
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
@@ -85,20 +170,32 @@ export default function TechniciansScreen({ navigation }) {
                 </View>            
             </View>
             <View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
-                
-                <TouchableOpacity style={style.sortBtn} onPress={() => setFilterVisible(true)}>
+                <Modal
+                    animationType='slide'
+                    transparent={true}        
+                    visible={modalVisible}            
+                    style={{ margin: 10, alignItems: 'center', justifyContent: 'center'}}>
+                        <View style={{marginVertical: 10, marginTop: 20, marginHorizontal: 20, backgroundColor: COLORS.white, padding: 10, paddingTop: 30}}>
+                            <TextInput placeholder='Search' placeholderTextColor={COLORS.green} style={{ paddingTop: 10 , fontSize: 20, color: COLORS.green}}/>
+                        </View>
+                        <FlatList
+                            data={options}
+                            style={{ paddingHorizontal: 10}}
+                            renderItem={(item, index) => <SearchItem item={item} index={index}/>}
+                        />
+                        <View>
+                            <TouchableOpacity style={{ borderColor: COLORS.green, borderWidth: 2, alignSelf: 'center', 
+                                    padding: 10, marginBottom: 20, borderRadius: 5, backgroundColor: COLORS.white}}
+                                    onPress={() => setModalVisible(false)}>
+                                <Text style={{textAlign: 'center', color: COLORS.green, fontWeight: 'bold', fontSize: 22}}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                </Modal>
+
+                <TouchableOpacity style={style.sortBtn} onPress={() => setModalVisible(true)}>
                     <Icon name='sort' size={30} color={COLORS.white}/>
                     <Text style={{ color: COLORS.white, fontSize: 22}}>{location.key? location.label:'Filter By City'}</Text>
-                </TouchableOpacity>
-                <ModalFilterPicker visible={filterVisible} options={options} onCancel={()=> setFilterVisible(false)} onSelect={(picked) => {
-                    console.log(picked);
-                    setLocation(picked)
-                    setFilterVisible(false)
-                    }}
-                    style={{
-                        marginTop: 70
-                    }}
-                    />
+                </TouchableOpacity>                
             </View>
             
             <FlatList 
@@ -132,7 +229,7 @@ const style = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        // justifyContent: 'center' 
+        justifyContent: 'center' 
     },
     input: {
         fontSize: 18,
