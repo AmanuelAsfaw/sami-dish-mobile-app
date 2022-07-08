@@ -54,8 +54,12 @@ const ProductDetailScreen = ({navigation, route}) => {
                 </View> 
       </View>
       <View style={style.imageContainer}>
-        <Image source={plant.img} style={{resizeMode: 'contain', flex: 1, maxWidth: width -30}} />
-        {/* <SliderBox images={image_list_}/> */}
+        <SliderBox images={[
+          "https://source.unsplash.com/1024x768/?nature",
+          "https://source.unsplash.com/1024x768/?water",
+          "https://source.unsplash.com/1024x768/?girl",
+          "https://source.unsplash.com/1024x768/?tree",
+        ]}/>
       </View>
       <ScrollView style={style.detailsContainer}>
         <View
@@ -155,6 +159,7 @@ const style = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.light
   },
   detailsContainer: {
     flex: 1,
