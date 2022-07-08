@@ -20,6 +20,7 @@ import * as MediaLibrary from 'expo-media-library';
 import RNDownloadButton from 'react-native-download-button'
 import { downloadToFolder } from 'expo-file-dl';
 import axios from 'axios';
+import { DOMAIN_NAME, FETCH_SOFTWARE_LIST } from '../../sample-data/constants';
 
 const width = Dimensions.get('screen').width - 40
 
@@ -32,9 +33,35 @@ export default function SoftwaresScreen({ navigation }) {
     const [phone, setPhone] = React.useState('+251964359872')
     const [expandSoft, setExpandSoft] = React.useState(null)
     const [downloadProgressPercent, setDownloadProgress] = React.useState(0)
+    const [software_list, setSoftwareList] = React.useState([])
+    const [loading, setLoading] = React.useState(false)
 
+    React.useEffect(() => {
+        console.log('use effect');
+        getSoftwares()
+    }, [])
+    async function getSoftwares(){
+        setLoading(true)
+        axios.get(FETCH_SOFTWARE_LIST)
+        .then((response) => {
+            console.log(response)
+            console.log('sotware list featch response ')
+            console.log(response.data)
+            if(response.data &&  response.status && response.data.success){
+                console.log(response.data.software_data)
+                setLoading(false)
+                setSoftwareList(response.data.software_data)
+            }
+        })
+        .catch((error) => {
+            console.log('Error: software list feath error')
+            setLoading(false)
+            console.log(error.message)
+        })
+    }
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
+        getSoftwares()
       }, [navigation])
     
     const callback = downloadProgress => {
@@ -94,7 +121,8 @@ export default function SoftwaresScreen({ navigation }) {
         // }
     }
 
-    const ShowDownloadIicon = ({id}) => {
+    const ShowDownloadIicon = ({id, link}) => {
+        console.log(link);
         if(id % 3 == 0){
             return (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -112,7 +140,7 @@ export default function SoftwaresScreen({ navigation }) {
             return(
                 <TouchableOpacity onPress={async() => {
                     console.log('download start')
-                    await Linking.openURL('https://sebrisat.com/wp-content/uploads/2020/03/TIGER-T8-HIGH-CLASS-V2flower_V3.8021557_20032020.bin')
+                    await Linking.openURL(DOMAIN_NAME+link)
                     // DownloadSoftware()
                 }}>
                     <Icon name='get-app' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
@@ -121,8 +149,17 @@ export default function SoftwaresScreen({ navigation }) {
         }
     }
 
-    const Card = ({news}) => {
-        if(news.id == expandSoft){
+    const Card = ({software}) => {
+        var image_uri;
+        if(software.software_file_set.length > 0){
+            // image_uri = {uri: DOMAIN_NAME + software.software_file_set[0].file}
+            console.log(DOMAIN_NAME + software.icon);
+            image_uri = {uri: DOMAIN_NAME + software.icon}
+        }else{
+            var image_uri = require('../../assets/notfound.jpg')
+        }
+        
+        if(software.id == expandSoft){
             return(
                 <View style={{ flex: 1, backgroundColor: COLORS.light, paddingTop: 90, marginBottom: 5, justifyContent: 'center', alignItems: 'center'}}
                     >
@@ -132,14 +169,15 @@ export default function SoftwaresScreen({ navigation }) {
                         alignItems: 'center', 
                         justifyContent: 'center'
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width -50}} source={news.img}/>
+                        <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width -50}} source={image_uri}/>
                     </View>  
                     <View style={{paddingHorizontal: 10}}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 0, textAlign: 'center', marginVertical: 20}}>{news.name}</Text>
-                        <Text style={{fontSize:11, marginRight: 20, textAlign: 'center'}}>{news.about}</Text>        
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 0, textAlign: 'center', marginVertical: 20}}>{software.title}</Text>
+                        <Text style={{fontSize:11, marginRight: 20, textAlign: 'center'}}>{software.description}</Text>        
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', 
+                            marginRight: 25, alignItems: 'center', minWidth: width - 150}}>
                             <View style={{backgroundColor: COLORS.green, marginRight: 0, marginVertical: 10, borderRadius: 40, padding: 5, minWidth: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
-                                <ShowDownloadIicon id={news.id} />
+                                <ShowDownloadIicon id={software.id} link={software.file}/>
                             </View>
                             <TouchableOpacity onPress={() => setExpandSoft(null)}>
                                 <Icon name='expand-less' size={35} color={COLORS.green}/>
@@ -160,15 +198,18 @@ export default function SoftwaresScreen({ navigation }) {
                         alignItems: 'center', 
                         justifyContent: 'center',
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain',maxWidth: 80}} source={news.img}/>
+                        <Image style={{ flex: 1, resizeMode: 'contain',minWidth: 80}} 
+                            source={image_uri}/>
                     </View>  
-                    <View style={{paddingHorizontal: 10}}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, marginRight: 90}}>{news.name} Softwares</Text>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginRight: 25, alignItems: 'center'}}>
+                    <View style={{paddingHorizontal: 10, marginHorizontal: 0}}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, }}>{software.title} s</Text>
+                            <View style={{ 
+                                flex: 1, flexDirection: 'row', justifyContent: 'space-between',
+                                alignItems: 'center', minWidth: 150}}>
                                 <View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 0, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
-                                    <ShowDownloadIicon id={news.id}/>
+                                    <ShowDownloadIicon id={software.id} link={software.file}/>
                                 </View>
-                                <TouchableOpacity onPress={() => setExpandSoft(news.id)} style={{justifyContent: 'flex-end'}}>
+                                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{justifyContent: 'flex-end'}}>
                                     <Icon name='expand-more' size={35} color={COLORS.green}/>
                                 </TouchableOpacity>
                             </View>
@@ -194,7 +235,7 @@ export default function SoftwaresScreen({ navigation }) {
             </View>
             <View>
                 
-            <FlatList 
+            {!loading && (<FlatList 
                 style={{backgroundColor: COLORS.white, marginTop: 5, marginBottom: 100}}
                 showsVerticalScrollIndicator={true}
                 contentContainerStyle={{
@@ -202,8 +243,15 @@ export default function SoftwaresScreen({ navigation }) {
                     paddingBottom: 50,
                     marginHorizontal: 10
                 }}
-                data={data} 
-                renderItem={({item}) => <Card news={item}/>}/>
+                data={software_list} 
+                renderItem={({item}) => <Card software={item}/>}/>)}
+            {loading && (
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 150}}>
+                    <LottieView source={require('../../assets/98657-loader.json')} 
+                        autoPlay loop size={150} autoSize={true} 
+                        style={{width: 140, color: COLORS.white}} color={COLORS.white}/>
+                </View>
+            )}
             </View>
         </SafeAreaView>
     );
