@@ -1,8 +1,5 @@
 import * as React from 'react';
 import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
-import ProductCard from '../../components/ProductCard';
-import products from '../../sample-data/products';
-import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -10,12 +7,12 @@ import axios from 'axios';
 import LottieView from 'lottie-react-native';
 
 import { DOMAIN_NAME, FETCH_HOME_CATEGORY_LIST } from '../../sample-data/constants';
-import product_list from '../../sample-data/products';
+
 
 const width = Dimensions.get('screen').width - 40
-const data = product_list
 
 const app_logo = require('../../assets/app.png')
+
 export default function HomeScreen({ navigation }) {
     const [loading, setLoading] = React.useState(false)
     const [category_list, setCategoryList] = React.useState([])
@@ -23,17 +20,13 @@ export default function HomeScreen({ navigation }) {
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
         getDataSet()
-        console.log(category_list);
       }, [navigation])
 
     async function getDataSet(){
         setLoading(true)
-        console.log(FETCH_HOME_CATEGORY_LIST)
         axios.get(FETCH_HOME_CATEGORY_LIST)
         .then((response) => {
-            console.log('Home Page Category list featch response ')
             if(response.data &&  response.status && response.data.success){
-              console.log(response.data.category_data)
               setLoading(false)
               setCategoryList(response.data.category_data)
         }
@@ -112,8 +105,7 @@ const style = StyleSheet.create({
         borderRadius: 10,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent: 'center' 
+        alignItems: 'center'
     },
     input: {
         fontSize: 18,
