@@ -4,7 +4,6 @@ import { SliderBox } from "react-native-image-slider-box"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../sample-data/COLORS';
 import { DOMAIN_NAME } from '../../sample-data/constants';
-import { image_list } from '../../sample-data/products.js';
 
 const width = Dimensions.get('screen').width
 
@@ -16,11 +15,10 @@ const ProductDetailScreen = ({navigation, route}) => {
   const [quantity, setQuantity] = React.useState(0)
   const [imageList, setImageList] = React.useState([])
 
-  console.log(plant);
-
   React.useLayoutEffect(() => {
     navigation.setOptions({headerShown: false});
   }, [navigation])
+
   React.useEffect(() => {
     if(plant && plant.product_file_set && plant.product_file_set.length){
       const images = []
@@ -28,21 +26,19 @@ const ProductDetailScreen = ({navigation, route}) => {
         images.push(DOMAIN_NAME + element.file)
       })
       setImageList(images)
-      console.log('image list set')
-      console.log(imageList);
     }
   }, [plant])
+
   const forwardToTelegram = useCallback(async() => {
     const text = plant.title + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(plant.price * quantity)
     const url = "https://t.me/samidish_info/url?new&text=asd"
     const supported = await Linking.canOpenURL(url)
     if(supported){
-      console.log(url)
       Clipboard.setString(text)
       await Linking.openURL(url)
     }
     else{
-      Alert.alert('Some Url Error : '+url)
+      Alert.alert('Url Open Error : '+url)
     }
   })
 
