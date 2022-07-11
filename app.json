@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "sami-dish",
+    "name": "Sami Dish",
     "slug": "sami-dish",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,7 +24,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "info.samidish.samidish",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
