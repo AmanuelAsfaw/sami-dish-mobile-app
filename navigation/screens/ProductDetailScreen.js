@@ -3,6 +3,7 @@ import {View, SafeAreaView, Image, Text, StyleSheet, Dimensions, ScrollView, Lin
 import { SliderBox } from "react-native-image-slider-box"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../sample-data/COLORS';
+import { DOMAIN_NAME } from '../../sample-data/constants';
 import { image_list } from '../../sample-data/products.js';
 
 const width = Dimensions.get('screen').width
@@ -13,17 +14,27 @@ const ProductDetailScreen = ({navigation, route}) => {
   const plant = route.params;
   const tg_username = 'namingishard' 
   const [quantity, setQuantity] = React.useState(0)
+  const [imageList, setImageList] = React.useState([])
 
-//   const image_list_ = image_list 
+  console.log(plant);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({headerShown: false});
   }, [navigation])
-
+  React.useEffect(() => {
+    if(plant && plant.product_file_set && plant.product_file_set.length){
+      const images = []
+      plant.product_file_set.forEach(element => {
+        images.push(DOMAIN_NAME + element.file)
+      })
+      setImageList(images)
+      console.log('image list set')
+      console.log(imageList);
+    }
+  }, [plant])
   const forwardToTelegram = useCallback(async() => {
-    const text = plant.name + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(plant.price * quantity)
-    const url = "https://t.me/namingishard/url?new&text=asd"
-    const url1 = "tg://msg?text="+text+"&to=@Alemseged"
+    const text = plant.title + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(plant.price * quantity)
+    const url = "https://t.me/samidish_info/url?new&text=asd"
     const supported = await Linking.canOpenURL(url)
     if(supported){
       console.log(url)
@@ -54,12 +65,14 @@ const ProductDetailScreen = ({navigation, route}) => {
                 </View> 
       </View>
       <View style={style.imageContainer}>
-        <SliderBox images={[
-          "https://source.unsplash.com/1024x768/?nature",
-          "https://source.unsplash.com/1024x768/?water",
-          "https://source.unsplash.com/1024x768/?girl",
-          "https://source.unsplash.com/1024x768/?tree",
-        ]}/>
+        <SliderBox images={
+          plant?
+            plant.product_file_set.map((product_file) =>  DOMAIN_NAME + product_file.file)
+          :[
+            require('../../assets/app.png'),
+            require('../../assets/app.png')
+          ]
+        }/>
       </View>
       <ScrollView style={style.detailsContainer}>
         <View
@@ -77,7 +90,7 @@ const ProductDetailScreen = ({navigation, route}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 22, fontWeight: 'bold'}}>{plant.name}</Text>
+          <Text style={{fontSize: 22, fontWeight: 'bold'}}>{plant.title}</Text>
           <View style={style.priceTag}>
             <Text
               style={{
@@ -99,7 +112,7 @@ const ProductDetailScreen = ({navigation, route}) => {
               lineHeight: 22,
               marginTop: 10,
             }}>
-            {plant.about}
+            {plant.description}
           </Text>
           <View
             style={{
@@ -134,7 +147,7 @@ const ProductDetailScreen = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={style.buyBtn} onPress={() => forwardToTelegram()}>
+            <TouchableOpacity style={style.buyBtn} onPress={() => forwardToTelegram()} disabled={quantity < 1}>
               <Text
                 style={{color: COLORS.white, fontSize: 18, fontWeight: 'bold'}}>
                 Buy
@@ -197,7 +210,8 @@ const style = StyleSheet.create({
   },
   priceTag: {
     backgroundColor: COLORS.green,
-    width: 80,
+    minWidth: 80,
+    paddingRight: 5,
     height: 40,
     justifyContent: 'center',
     borderTopLeftRadius: 25,
