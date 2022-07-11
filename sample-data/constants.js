@@ -12,3 +12,5 @@ export const FETCH_TECHNICIANS_LIST = DOMAIN_NAME + '/mobile_api/technicians'
 export const FETCH_HOME_CATEGORY_LIST = DOMAIN_NAME + '/mobile_api/categories'
 
 export const FETCH_HOME_PRODUCT_LIST = DOMAIN_NAME + '/mobile_api/products/'
+
+export const FETCH_HOME_SEARCH_PRODUCT_LIST = DOMAIN_NAME + '/mobile_api/search_product/'
