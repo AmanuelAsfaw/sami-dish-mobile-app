@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './screens/HomeScreen';
 import NewsScreen from './screens/NewsScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import TechniciansScreen from './screens/techniciansScreen';
+import TechniciansScreen from './screens/TechniciansScreen';
 import SoftwaresScreen from './screens/SoftwareScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductDetailScreen from './screens/ProductDetailScreen';
