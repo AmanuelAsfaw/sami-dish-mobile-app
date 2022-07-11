@@ -12,16 +12,15 @@ const width = Dimensions.get('screen').width - 40
 const data = products
 const app_logo = require('../../assets/app.png')
 const img = require('../../assets/yonatan.jpg')
-export default function TechnicianDetailScreen({ navigation }) {
-    const [phone, setPhone] = React.useState('+251964359872')
-
+export default function TechnicianDetailScreen({ navigation, route }) {
+    const technician = route.params;
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
       }, [navigation])
 
     const forwardToCall = async () => {
         const args = {
-            number: phone, // String value with the number to call
+            number: technician.phone, // String value with the number to call
             prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
             skipCanOpen: true // Skip the canOpenURL check
         }
@@ -61,13 +60,13 @@ export default function TechnicianDetailScreen({ navigation }) {
                     <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width - 70, paddingHorizontal: 10, borderRadius: 150, marginLeft: 45}} source={img}/>
                 </View>
                 
-                <Text style={{ fontSize: 28, fontWeight: 'bold', color: COLORS.white, textAlign: 'center', paddingTop: 15}}>Your Name</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500', textAlign: 'center'}}>Region</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 30, fontWeight: '300', textAlign: 'center'}}>City</Text>
+                <Text style={{ fontSize: 28, fontWeight: 'bold', color: COLORS.white, textAlign: 'center', paddingTop: 15}}>{technician.first_name +' '+ technician.middle_name}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500', textAlign: 'center'}}>{technician.region.title}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 30, fontWeight: '300', textAlign: 'center'}}>{technician.city.title}</Text>
                 
                 <TouchableOpacity onPress={() => forwardToCall('+251964359872')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Icon name='phone' size={30} color={COLORS.white}/>
-                    <Text style={{color: COLORS.white, fontSize: 22, fontWeight: '500', textAlign: 'center', paddingLeft: 5}}>+251964359872</Text>
+                    <Text style={{color: COLORS.white, fontSize: 22, fontWeight: '500', textAlign: 'center', paddingLeft: 5}}>{technician.phone}</Text>
                 </TouchableOpacity>
             </View>
             </View>
