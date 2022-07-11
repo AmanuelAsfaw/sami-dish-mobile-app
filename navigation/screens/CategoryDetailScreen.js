@@ -13,7 +13,6 @@ const width = Dimensions.get('screen').width
 const app_logo = require('../../assets/app.png')
 
 export default function CategoryScreen({ navigation, route }) {
-    console.log(route.params)
     const { category_data, category_list, category_id } = route.params
     const [categoryIndex, setCategoryIndex] = React.useState(category_id)
     const [loading, setLoading] = React.useState(false)
@@ -53,7 +52,6 @@ export default function CategoryScreen({ navigation, route }) {
     }
 
     async function getSearchProductList(){
-        console.log(searchKey);
         if(!searchKey && searchKey.length < 3 ) {
             return;
         }
@@ -146,7 +144,6 @@ export default function CategoryScreen({ navigation, route }) {
                 </View>
                 <TouchableOpacity style={style.sortBtn} 
                     onPress={async() => {
-                        console.log('async task');
                         getSearchProductList()
                     }} 
                     disabled={searchKey && searchKey.length < 3 ? true: false}
