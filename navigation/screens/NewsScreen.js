@@ -22,7 +22,6 @@ export default function NewsScreen({ navigation }) {
       }, [navigation])
 
     React.useEffect(() => {
-        console.log('use effect');
         getNewsList()
     }, [])
 
