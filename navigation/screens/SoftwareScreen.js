@@ -6,10 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import LottieView from 'lottie-react-native';
 
-import * as FileSystem from 'expo-file-system';
-
-import * as Permissions from 'expo-permissions';
-
 import axios from 'axios';
 import { DOMAIN_NAME, FETCH_SOFTWARE_LIST } from '../../sample-data/constants';
 
@@ -18,14 +14,12 @@ const width = Dimensions.get('screen').width - 40
 const app_logo = require('../../assets/app.png')
 
 export default function SoftwaresScreen({ navigation }) {
-    const [phone, setPhone] = React.useState('+251964359872')
     const [expandSoft, setExpandSoft] = React.useState(null)
     const [downloadProgressPercent, setDownloadProgress] = React.useState(0)
     const [software_list, setSoftwareList] = React.useState([])
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
-        console.log('use effect');
         getSoftwares()
     }, [])
 
@@ -33,19 +27,13 @@ export default function SoftwaresScreen({ navigation }) {
         setLoading(true)
         axios.get(FETCH_SOFTWARE_LIST)
         .then((response) => {
-            console.log(response)
-            console.log('sotware list featch response ')
-            console.log(response.data)
             if(response.data &&  response.status && response.data.success){
-                console.log(response.data.software_data)
                 setLoading(false)
                 setSoftwareList(response.data.software_data)
             }
         })
         .catch((error) => {
-            console.log('Error: software list feath error')
             setLoading(false)
-            console.log(error.message)
         })
     }
 
@@ -55,7 +43,7 @@ export default function SoftwaresScreen({ navigation }) {
       }, [navigation])
     
     const ShowDownloadIicon = ({id, link}) => {
-        console.log(link)
+        
         if(id % 3 == 0){
             return (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -72,9 +60,7 @@ export default function SoftwaresScreen({ navigation }) {
         } else{
             return(
                 <TouchableOpacity onPress={async() => {
-                    console.log('download start')
                     await Linking.openURL(DOMAIN_NAME+link)
-                    // DownloadSoftware()
                 }}>
                     <Icon name='get-app' size={30} color={COLORS.white} style={{borderRadius: 10}}/>
                 </TouchableOpacity>
@@ -85,7 +71,6 @@ export default function SoftwaresScreen({ navigation }) {
     const Card = ({software}) => {
         var image_uri;
         if(software.icon){
-            console.log(DOMAIN_NAME + software.icon);
             image_uri = {uri: DOMAIN_NAME + software.icon}
         }else{
             var image_uri = require('../../assets/notfound.jpg')
@@ -124,8 +109,7 @@ export default function SoftwaresScreen({ navigation }) {
                 <View style={{ flex: 1, flexDirection: 'row', paddingVertical: 10, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
                     >
                     <View style={{ 
-                        maxHeight: 100, 
-                        // backgroundColor: COLORS.dark,
+                        maxHeight: 100,
                         borderRadius: 15,
                         alignItems: 'center', 
                         justifyContent: 'center',
