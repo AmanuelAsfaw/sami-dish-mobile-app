@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions } from 'react-native';
-import ProductCard from '../../components/ProductCard';
-import { news_list } from '../../sample-data/products';
+import { View, Text, SafeAreaView, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import call from 'react-native-phone-call';
+
 import { DOMAIN_NAME, FETCH_NEWS_LIST } from '../../sample-data/constants';
 
 import axios from 'axios';
@@ -14,11 +11,9 @@ import LottieView from 'lottie-react-native';
 
 const width = Dimensions.get('screen').width - 40
 
-const data = news_list
 const app_logo = require('../../assets/app.png')
-const img = require('../../assets/yonatan.jpg')
+
 export default function NewsScreen({ navigation }) {
-    const [phone, setPhone] = React.useState('+251964359872')
     const [newsList, setNewsList] = React.useState([])
     const [loading, setLoading] = React.useState(false)
 
@@ -30,30 +25,24 @@ export default function NewsScreen({ navigation }) {
         console.log('use effect');
         getNewsList()
     }, [])
+
     async function getNewsList(){
         setLoading(true)
         axios.get(FETCH_NEWS_LIST)
         .then((response) => {
-            console.log(response)
-            console.log('News list featch response ')
-            console.log(response.data)
             if(response.data &&  response.status && response.data.success){
-                console.log(response.data.news_data)
                 setLoading(false)
                 setNewsList(response.data.news_data)
             }
         })
         .catch((error) => {
-            console.log('Error: News list feath error')
             setLoading(false)
-            console.log(error.message)
         })
     }
     
     const Card = ({news}) => {
         var image_uri;
         if(news.news_files.length > 0){
-            console.log(DOMAIN_NAME + news.news_files[0].file);
             image_uri = {uri: DOMAIN_NAME + news.news_files[0].file}
         }else{
             var image_uri = require('../../assets/notfound.jpg')

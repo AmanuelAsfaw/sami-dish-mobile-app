@@ -8,7 +8,6 @@ import { DOMAIN_NAME } from '../../sample-data/constants';
 const width = Dimensions.get('screen').width - 40
 
 const app_logo = require('../../assets/app.png')
-const img = require('../../assets/yonatan.jpg')
 
 export default function TechnicianDetailScreen({ navigation, route }) {
     const technician = route.params;
