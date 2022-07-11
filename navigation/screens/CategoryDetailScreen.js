@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
-import ProductCard from '../../components/ProductCard';
-import products from '../../sample-data/products';
 import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,8 +10,8 @@ import LottieView from 'lottie-react-native'
 
 const width = Dimensions.get('screen').width
 
-const data = products
 const app_logo = require('../../assets/app.png')
+
 export default function CategoryScreen({ navigation, route }) {
     console.log(route.params)
     const { category_data, category_list, category_id } = route.params
@@ -21,8 +19,7 @@ export default function CategoryScreen({ navigation, route }) {
     const [loading, setLoading] = React.useState(false)
     const [product_list, setProductList] = React.useState([])
     const [searchKey, setSearchKey] = React.useState(null)
-        
-    console.log(categoryIndex);
+
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
         getProductList()
@@ -36,9 +33,6 @@ export default function CategoryScreen({ navigation, route }) {
     }, [categoryIndex])
 
     React.useEffect(() => {
-        console.log('category_id changed'+ category_id)
-        console.log('category_id from route changed'+ route.params)
-        console.log(route.params)
         if(category_id || categoryIndex !== category_id){
             setCategoryIndex(category_id)
         }
@@ -48,18 +42,13 @@ export default function CategoryScreen({ navigation, route }) {
         setLoading(true)
         axios.get(FETCH_HOME_PRODUCT_LIST+categoryIndex)
         .then((response) => {
-            // console.log(response)
-            // console.log('Product list featch response ')
             if(response.data &&  response.status && response.data.success){
-            //   console.log(response.data.products_data)
               setLoading(false)
               setProductList(response.data.products_data)
             }
         })
         .catch((error) => {
-            console.log('Error: Product list feath error')
             setLoading(false)
-            console.log(error.message)
         })
     }
 
@@ -68,23 +57,17 @@ export default function CategoryScreen({ navigation, route }) {
         if(!searchKey && searchKey.length < 3 ) {
             return;
         }
+
         setLoading(true)
-        console.log(FETCH_HOME_SEARCH_PRODUCT_LIST+searchKey);
         axios.get(FETCH_HOME_SEARCH_PRODUCT_LIST+searchKey)
         .then((response) => {
-            console.log('Search Product list featch response ')
-            console.log(response)
             if(response.data &&  response.status && response.data.success){
-                console.log(response.data.product_data)
                 setLoading(false)
                 setProductList(response.data.product_data)
-                // setProductList([])
             }
         })
         .catch((error) => {
-            console.log('Error: Search Product list feath error')
             setLoading(false)
-            console.log(error.message)
         })
     }
     const CategoryList = () => {
@@ -213,8 +196,7 @@ const style = StyleSheet.create({
         borderRadius: 10,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent: 'center' 
+        alignItems: 'center'
     },
     input: {
         fontSize: 18,
