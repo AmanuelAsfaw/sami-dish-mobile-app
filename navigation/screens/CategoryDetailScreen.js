@@ -7,7 +7,7 @@ import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import axios from 'axios';
-import { DOMAIN_NAME, FETCH_HOME_PRODUCT_LIST } from '../../sample-data/constants';
+import { DOMAIN_NAME, FETCH_HOME_PRODUCT_LIST, FETCH_HOME_SEARCH_PRODUCT_LIST } from '../../sample-data/constants';
 import LottieView from 'lottie-react-native'
 
 const width = Dimensions.get('screen').width
@@ -20,6 +20,7 @@ export default function CategoryScreen({ navigation, route }) {
     const [categoryIndex, setCategoryIndex] = React.useState(category_id)
     const [loading, setLoading] = React.useState(false)
     const [product_list, setProductList] = React.useState([])
+    const [searchKey, setSearchKey] = React.useState(null)
         
     console.log(categoryIndex);
     React.useLayoutEffect(() => {
@@ -57,6 +58,31 @@ export default function CategoryScreen({ navigation, route }) {
         })
         .catch((error) => {
             console.log('Error: Product list feath error')
+            setLoading(false)
+            console.log(error.message)
+        })
+    }
+
+    async function getSearchProductList(){
+        console.log(searchKey);
+        if(!searchKey && searchKey.length < 3 ) {
+            return;
+        }
+        setLoading(true)
+        console.log(FETCH_HOME_SEARCH_PRODUCT_LIST+searchKey);
+        axios.get(FETCH_HOME_SEARCH_PRODUCT_LIST+searchKey)
+        .then((response) => {
+            console.log('Search Product list featch response ')
+            console.log(response)
+            if(response.data &&  response.status && response.data.success){
+                console.log(response.data.product_data)
+                setLoading(false)
+                setProductList(response.data.product_data)
+                // setProductList([])
+            }
+        })
+        .catch((error) => {
+            console.log('Error: Search Product list feath error')
             setLoading(false)
             console.log(error.message)
         })
@@ -130,11 +156,20 @@ export default function CategoryScreen({ navigation, route }) {
             <View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
                 <View style={style.searchContainer}>
                     <Icon name='search' size={25} style={{marginLeft: 5}} color={COLORS.green}/> 
-                    <TextInput placeholder={'Search from '+ category_data.title} style={style.input} placeholderTextColor={COLORS.light_green}/>
+                    <TextInput placeholder={'Search'} style={style.input} 
+                    placeholderTextColor={COLORS.light_green}
+                    onChangeText={(text)=> setSearchKey(text)}
+                    />
                 </View>
-                <View style={style.sortBtn}>
+                <TouchableOpacity style={style.sortBtn} 
+                    onPress={async() => {
+                        console.log('async task');
+                        getSearchProductList()
+                    }} 
+                    disabled={searchKey && searchKey.length < 3 ? true: false}
+                    >
                     <Icon name='sort' size={30} color={COLORS.white}/>
-                </View>
+                </TouchableOpacity>
             </View>
             <CategoryList/>
             {!loading &&(<FlatList 
