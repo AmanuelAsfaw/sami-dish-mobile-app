@@ -6,21 +6,43 @@ import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const width = Dimensions.get('screen').width - 40
+import axios from 'axios';
+import LottieView from 'lottie-react-native';
 
-const data = products
+import { DOMAIN_NAME, FETCH_HOME_CATEGORY_LIST } from '../../sample-data/constants';
+import product_list from '../../sample-data/products';
+
+const width = Dimensions.get('screen').width - 40
+const data = product_list
+
 const app_logo = require('../../assets/app.png')
 export default function HomeScreen({ navigation }) {
-    const category_list = ['All', 'Cable', 'Dish', 'Tv', 'Reciever','one', 'Cable', 'Dish', 'Tv', 'Reciever','two', 'Cable', 'Dish', 'Tv', 'Reciever']
-    const [categoryIndex, setCategoryIndex] = React.useState(0) 
+    const [loading, setLoading] = React.useState(false)
+    const [category_list, setCategoryList] = React.useState([])
 
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
+        getDataSet()
+        console.log(category_list);
       }, [navigation])
+
+    async function getDataSet(){
+        setLoading(true)
+        console.log(FETCH_HOME_CATEGORY_LIST)
+        axios.get(FETCH_HOME_CATEGORY_LIST)
+        .then((response) => {
+            console.log('Home Page Category list featch response ')
+            if(response.data &&  response.status && response.data.success){
+              console.log(response.data.category_data)
+              setLoading(false)
+              setCategoryList(response.data.category_data)
+        }
+        })
+    }
 
     return (
         <SafeAreaView style={{marginTop: 50,}}>
-            <View style={style.header}>
+            {true&&(<View style={style.header}>
                 <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
                 <View style={{
                     width: 60,
@@ -30,8 +52,8 @@ export default function HomeScreen({ navigation }) {
                 }}>
                     <Image source={app_logo} style={{flex: 1, resizeMode: 'center'}}/>
                 </View>            
-            </View>
-            <View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
+            </View>)}
+            {false&&(<View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
                 <View style={style.searchContainer}>
                     <Icon name='search' size={25} style={{marginLeft: 5}} color={COLORS.green}/> 
                     <TextInput placeholder='Search' style={style.input} placeholderTextColor={COLORS.light_green}/>
@@ -39,29 +61,37 @@ export default function HomeScreen({ navigation }) {
                 <View style={style.sortBtn}>
                     <Icon name='sort' size={30} color={COLORS.white}/>
                 </View>
-            </View>
-            {/* <CategoryList/> */}
-            <View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 20}}>
+            </View>)}
+            
+            {!loading &&(<View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 20}}>
                 <ScrollView horizontal={true}>
-                    {data.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={() => navigation.navigate('Category', {product:item, categoryIndex: index})}>
+                    {category_list.map((item, index) => (
+                        <TouchableOpacity key={index} onPress={() => navigation.navigate('Category', {category_data:item, category_list, category_id: item.id})}>
                             <View style={style.productCard}>
-                                <Text style={{ paddingLeft: 20, paddingTop: 20, fontWeight: '300', color: COLORS.white, fontSize: 22}}>{item.category}</Text>
-                                <Text style={{ fontSize: 28, fontWeight: 'bold', paddingLeft: 40, color: COLORS.white}}>{item.name}</Text>
+                                <Text style={{ paddingLeft: 20, paddingTop: 20, fontWeight: '300', color: COLORS.white, fontSize: 22}}>{item.title}</Text>
+                                <Text style={{ fontSize: 28, fontWeight: 'bold', paddingLeft: 40, color: COLORS.white}}>{item.info}</Text>
                                 <View style={{
-                                    height: 150,
+                                    height: 250,
                                     alignItems: 'center',
                                     marginTop: 50,
                                     maxWidth: width -50
                                 }}>
-                                    <Image style={{ flex: 1, resizeMode: 'contain', maxWidth: width - 70, paddingHorizontal: 10}} source={item.img}/>
+                                    <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width - 70, paddingHorizontal: 10}} source={{uri: DOMAIN_NAME + item.image}}/>
                                 </View>
                                 <Text style={{ paddingHorizontal: 10, color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500'}}>{item.description}</Text>
                             </View>
                         </TouchableOpacity>                        
                     ))}
                 </ScrollView>
-            </View>
+            </View>)}
+
+            {loading && (
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 150}}>
+                    <LottieView source={require('../../assets/98657-loader.json')} 
+                        autoPlay loop size={150} autoSize={true} 
+                        style={{width: 140, color: COLORS.white}} color={COLORS.white}/>
+                </View>
+            )}
             
         </SafeAreaView>
     );
@@ -126,8 +156,8 @@ const style = StyleSheet.create({
     productCard: {
         backgroundColor: COLORS.green,
         width,
-        maxHeight: 500,
-        minHeight: 500,
+        maxHeight: 550,
+        minHeight: 550,
         marginBottom: 10 ,
         marginHorizontal: 5,
         borderRadius: 10
