@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions, Modal } from 'react-native';
-import ProductCard from '../../components/ProductCard';
-import { technicians_list } from '../../sample-data/products';
+import { View, Text, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions, Modal } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ModalFilterPicker from 'react-native-modal-filter-picker';
 import axios from 'axios';
 import { DOMAIN_NAME, FETCH_TECHNICIANS_LIST } from '../../sample-data/constants';
 
@@ -13,12 +10,9 @@ import LottieView from 'lottie-react-native';
 
 const width = Dimensions.get('screen').width
 
-const data = technicians_list
 const app_logo = require('../../assets/app.png')
+
 export default function TechniciansScreen({ navigation }) {
-    const category_list = ['All', 'Cable', 'Dish', 'Tv', 'Reciever','one', 'Cable', 'Dish', 'Tv', 'Reciever','two', 'Cable', 'Dish', 'Tv', 'Reciever']
-    const [categoryIndex, setCategoryIndex] = React.useState(0) 
-    const [filterVisible, setFilterVisible] = React.useState(false) 
     const [location, setLocation] = React.useState({ key: null, label: null}) 
     const [loading, setLoading] = React.useState(false)
     const [technician_list, setTechnicianList] = React.useState([])
@@ -37,38 +31,25 @@ export default function TechniciansScreen({ navigation }) {
       setLoading(true)
       axios.get(FETCH_TECHNICIANS_LIST)
       .then((response) => {
-          // console.log(response)
-          console.log('Technician list featch response ')
-          // console.log(response.data)
           if(response.data &&  response.status && response.data.success){
-            console.log(response.data.technician_data)
-            console.log(response.data.city_data)
             setLoading(false)
             setTechnicianList(response.data.technician_data)
             const cities = []
-            // for (let i = 0; i < response.data.city_data.length; i++) {
-            //   console.log('element '+ response.data.city_data[i])
-            //   cities.push(response.data.city_data[i].title)
-            // }
+            
             response.data.city_data.forEach(element => {
               cities.push(element.title)
             });
             
             setCityList(cities)
-            console.log(city_list)
-              
           }
       })
       .catch((error) => {
-          console.log('Error: Technician list feath error')
           setLoading(false)
-          console.log(error.message)
       })
     }
 
     const Card = ({technician}) => {
-      // console.log(technician);
-      console.log(DOMAIN_NAME+technician.photo);
+        
         return (
             <View>
                 <View style={style.card}>
@@ -78,7 +59,6 @@ export default function TechniciansScreen({ navigation }) {
                     </View>
                     <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10}}>{technician.first_name+ ' '+technician.middle_name}</Text>
                     <View style={{
-                        // flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: 5
                     }}>
@@ -107,11 +87,16 @@ export default function TechniciansScreen({ navigation }) {
     }
 
     const SearchItem = ({ item}) => {
+        
       return (
       <TouchableOpacity onPress={()=> {
         setTechnicianFilterKey(item.item)
         setModalVisible(false)
         setCityFilterKey('')
+        setLocation({
+            key : item.item,
+            label : item.item
+        })
         }}>
         <Text key={'region_city_'+item.index} style={{marginVertical: 5, backgroundColor: COLORS.white, 
           borderRadius: 2, color: COLORS.green, borderColor: COLORS.green, fontSize: 18,
@@ -135,8 +120,7 @@ export default function TechniciansScreen({ navigation }) {
             </View>
             <View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
                 <Modal
-                    animationType='slide'
-                    // transparent={true}        
+                    animationType='slide'      
                     visible={modalVisible}            
                     style={{ margin: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.white}}>
                         <View style={{marginVertical: 10, marginTop: 0, marginHorizontal: 5, backgroundColor: COLORS.white, padding: 10, paddingTop: 10}}>
@@ -160,16 +144,6 @@ export default function TechniciansScreen({ navigation }) {
                             style={{ paddingHorizontal: 10, minHeight: 100, maxHeight: 550}}
                             renderItem={(item, index) => <SearchItem item={item} index={index}/>}
                         />
-                        {/* <View>
-                            <TouchableOpacity style={{ borderColor: COLORS.green, borderWidth: 2, alignSelf: 'center', 
-                                    padding: 10, marginBottom: 20, borderRadius: 5, backgroundColor: COLORS.white}}
-                                    onPress={() => {
-                                        setModalVisible(false)                                        
-                                        setCityFilterKey('')
-                                    }}>
-                                <Text style={{textAlign: 'center', color: COLORS.green, fontWeight: 'bold', fontSize: 22}}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View> */}
                 </Modal>
 
                 <TouchableOpacity style={style.sortBtn} onPress={() => setModalVisible(true)}>
