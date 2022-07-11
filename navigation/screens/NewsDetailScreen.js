@@ -1,18 +1,12 @@
 import * as React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Clipboard, TouchableOpacity, Dimensions } from 'react-native';
-import ProductCard from '../../components/ProductCard';
-import { news_list } from '../../sample-data/products';
-import { FlatList } from 'react-native-gesture-handler';
+import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet, Dimensions } from 'react-native';
 import COLORS from '../../sample-data/COLORS';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SliderBox } from "react-native-image-slider-box";
-import { DOMAIN_NAME } from '../../sample-data/constants';
 
 const width = Dimensions.get('screen').width - 40
 
 const app_logo = require('../../assets/app.png')
-const news1 = require('../../assets/News/4.jpg')
-const news2 = require('../../assets/News/6.jpg')
+
 export default function NewsDetailScreen({ navigation, route }) {
     const { news, imageList } = route.params
     const [newsImageList, setNewsImageList] = React.useState(imageList)
@@ -21,13 +15,6 @@ export default function NewsDetailScreen({ navigation, route }) {
         navigation.setOptions({headerShown: false});
       }, [navigation])
 
-    const images = [
-      "https://source.unsplash.com/1024x768/?nature",
-      "https://source.unsplash.com/1024x768/?water",
-      "https://source.unsplash.com/1024x768/?girl",
-      "https://source.unsplash.com/1024x768/?tree",
-    ]
-    
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <ScrollView style={{marginBottom: 0}}>
