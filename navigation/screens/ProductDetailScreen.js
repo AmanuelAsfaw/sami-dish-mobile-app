@@ -12,7 +12,7 @@ const app_logo = require('../../assets/app.png')
 const ProductDetailScreen = ({navigation, route}) => {
   const plant = route.params;
   const tg_username = 'namingishard' 
-  const [quantity, setQuantity] = React.useState(0)
+  const [quantity, setQuantity] = React.useState(1)
   const [imageList, setImageList] = React.useState([])
 
   React.useLayoutEffect(() => {
@@ -61,14 +61,15 @@ const ProductDetailScreen = ({navigation, route}) => {
                 </View> 
       </View>
       <View style={style.imageContainer}>
-        <SliderBox images={
-          plant?
-            plant.product_file_set.map((product_file) =>  DOMAIN_NAME + product_file.file)
-          :[
-            require('../../assets/app.png'),
-            require('../../assets/app.png')
-          ]
-        }/>
+        <SliderBox 
+          images={
+            plant?
+              plant.product_file_set.map((product_file) =>  DOMAIN_NAME + product_file.file)
+            :[
+              require('../../assets/app.png'),
+              require('../../assets/app.png')
+            ]
+          }/>
       </View>
       <ScrollView style={style.detailsContainer}>
         <View
@@ -143,7 +144,7 @@ const ProductDetailScreen = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={style.buyBtn} onPress={() => forwardToTelegram()} disabled={quantity < 1}>
+            <TouchableOpacity style={[style.buyBtn, quantity < 1? style.disabledBuyBtn: {}]} onPress={() => forwardToTelegram()} disabled={quantity < 1}>
               <Text
                 style={{color: COLORS.white, fontSize: 18, fontWeight: 'bold'}}>
                 Buy
@@ -168,16 +169,25 @@ const style = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.light
+    backgroundColor: '#F4F4F4',
+    shadowColor: COLORS.dark,
+    shadowOpacity: .8,
+    shadowOffset: { width: 45, height: 45},
+    elevation: 10,
   },
   detailsContainer: {
     flex: 1,
-    backgroundColor: COLORS.light,
+    backgroundColor: COLORS.white,
     marginHorizontal: 7,
     marginBottom: 7,
     borderRadius: 20,
     marginTop: 10,
     paddingTop: 30,
+    // shadowColor: '#00c04b',
+    shadowColor: COLORS.dark,
+    shadowOpacity: .8,
+    shadowOffset: { width: 45, height: 45},
+    elevation: 10,
   },
   line: {
     width: 25,
@@ -203,6 +213,8 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
+    borderColor: COLORS.light,
+    borderWidth: 2
   },
   priceTag: {
     backgroundColor: COLORS.green,
@@ -213,6 +225,15 @@ const style = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderBottomLeftRadius: 25,
   },
+  disabledBuyBtn : {
+      borderColor: COLORS.white,
+      borderWidth: 2,
+      shadowColor: '#00c04b',
+      shadowOpacity: .8,
+      shadowOffset: { width: 45, height: 45},
+      elevation: 10,
+      backgroundColor: COLORS.light
+  }
 });
 
 export default ProductDetailScreen;
