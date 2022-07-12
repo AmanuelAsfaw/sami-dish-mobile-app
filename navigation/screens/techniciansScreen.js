@@ -52,7 +52,7 @@ export default function TechniciansScreen({ navigation }) {
         
         return (
             <View>
-                <View style={style.card}>
+                <TouchableOpacity style={style.card} onPress={() => navigation.navigate('TechnicianDetail', technician)}>
                     <View style={{ height: 100, alignItems: 'center', borderRadius: 100}}>
                         <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width/2 -70, backgroundColor: COLORS.light,
                           borderRadius: 100, borderColor: COLORS.white, borderWidth: 2}} source={ { uri : DOMAIN_NAME+technician.photo}}/>
@@ -80,7 +80,7 @@ export default function TechniciansScreen({ navigation }) {
                             <Icon name='phone' color={COLORS.white} size={35}/>
                         </TouchableOpacity>
                     </View>
-                    </View>
+                    </TouchableOpacity>
                     
             </View>
         )
