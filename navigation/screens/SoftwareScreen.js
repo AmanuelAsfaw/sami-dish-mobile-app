@@ -106,7 +106,7 @@ export default function SoftwaresScreen({ navigation }) {
         }
         else{
             return (
-                <View style={{ flex: 1, flexDirection: 'row', paddingVertical: 10, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
+                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{ flex: 1, flexDirection: 'row', paddingVertical: 10, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
                     >
                     <View style={{ 
                         maxHeight: 100,
@@ -131,7 +131,7 @@ export default function SoftwaresScreen({ navigation }) {
                             </View>
                             
                     </View>   
-                </View>
+                </TouchableOpacity>
             )
         }
     }
