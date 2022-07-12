@@ -90,7 +90,7 @@ export default function CategoryScreen({ navigation, route }) {
         }
         return (
             <View>
-                <View style={style.card}>
+                <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={style.card}>
                     <View style={{ height: 100, alignItems: 'center'}}>
                         <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width/2 -70}} source={image_uri}/>
                     </View>
@@ -103,21 +103,20 @@ export default function CategoryScreen({ navigation, route }) {
                         <Text style={{ fontSize: 19, fontWeight: '300'}}>{product.price} ETB</Text>
                     </View>
                     <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={{
-                            height: 35,
-                            width: 35,
-                            backgroundColor: COLORS.green,
-                            borderRadius: 2.5,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center',
-                            alignSelf:'flex-end'
-                        }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={{
+                                height: 35,
+                                width: 35,
+                                backgroundColor: COLORS.green,
+                                borderRadius: 2.5,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center',
+                                alignSelf:'flex-end'
+                            }}>
                             <Icon name='shopping-cart' color={COLORS.white} size={30}/>
                         </TouchableOpacity>
                     </View>
-                    </View>
-                    
+                </TouchableOpacity>
             </View>
         )
     }
