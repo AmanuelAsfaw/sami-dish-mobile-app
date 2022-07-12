@@ -4,7 +4,7 @@
     "slug": "sami-dish",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/appicon.png",
@@ -22,8 +22,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#111111"
       },
       "package": "info.samidish.samidish",
       "versionCode": 1
