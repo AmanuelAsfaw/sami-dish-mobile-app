@@ -17,8 +17,11 @@ export default function TechniciansScreen({ navigation }) {
     const [loading, setLoading] = React.useState(false)
     const [technician_list, setTechnicianList] = React.useState([])
     const [city_list, setCityList] = React.useState([])
+    const [region_list, setRegionList] = React.useState([])
     const [cityFilterKey, setCityFilterKey] = React.useState('')
-    const [technicianFilterKey, setTechnicianFilterKey] = React.useState('')
+    const [technicianFilterKey, setTechnicianFilterKey] = React.useState(0)
+    const [regionIndex, setRegionIndex] = React.useState(0)
+
 
     const [modalVisible, setModalVisible] = React.useState(false)
 
@@ -26,44 +29,43 @@ export default function TechniciansScreen({ navigation }) {
         navigation.setOptions({headerShown: false});
         getDataSet()
       }, [navigation])
-      
+    
     async function getDataSet(){
-      setLoading(true)
-      axios.get(FETCH_TECHNICIANS_LIST)
-      .then((response) => {
-          if(response.data &&  response.status && response.data.success){
+        setLoading(true)
+        axios.get(FETCH_TECHNICIANS_LIST)
+        .then((response) => {
+            if(response.data &&  response.status && response.data.success){
+              setLoading(false)
+              setTechnicianList(response.data.technician_data)
+              
+              setRegionList(response.data.region_data)
+              setRegionIndex(response.data.region_data[0].id)
+              
+              setCityList(response.data.city_data)
+            }
+        })
+        .catch((error) => {
             setLoading(false)
-            setTechnicianList(response.data.technician_data)
-            const cities = []
-            
-            response.data.city_data.forEach(element => {
-              cities.push(element.title)
-            });
-            
-            setCityList(cities)
-          }
-      })
-      .catch((error) => {
-          setLoading(false)
-      })
-    }
-
+        })
+      }
+  
     const Card = ({technician}) => {
         
         return (
             <View>
-                <TouchableOpacity style={style.card} onPress={() => navigation.navigate('TechnicianDetail', technician)}>
-                    <View style={{ height: 100, alignItems: 'center', borderRadius: 100}}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width/2 -70, backgroundColor: COLORS.light,
-                          borderRadius: 100, borderColor: COLORS.white, borderWidth: 2}} source={ { uri : DOMAIN_NAME+technician.photo}}/>
+                <TouchableOpacity style={style.card} onPress={() => {navigation.navigate('TechnicianDetail', technician)}}>
+                    <View style={{ height: width/2 -65, width: width/2 -65, alignItems: 'center', justifyContent: 'center', borderRadius: width/2}}>
+                        <Image style={{ flex: 1, resizeMode: 'contain',
+                            width: width/2 -70, height: width/2 -70, backgroundColor: COLORS.light,
+                            borderRadius: width/2 - 70, borderColor: COLORS.white, borderWidth: 2}} source={ { uri : DOMAIN_NAME+technician.photo}}/>
                     </View>
                     <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10}}>{technician.first_name+ ' '+technician.middle_name}</Text>
                     <View style={{
                         justifyContent: 'space-between',
                         marginTop: 5
                     }}>
-                        <Text style={{ fontSize: 16, fontWeight: '300'}}>{technician.region.title}</Text>
-                        <Text style={{ fontSize: 12, fontWeight: '300'}}>{technician.city.title}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '300'}}>{technician.region? technician.region.title: ''}</Text>
+                        <Text style={{ fontSize: 12, fontWeight: '300'}}>{technician.city? technician.city.title: ''}</Text>
                         
                     </View>
                     <View>
@@ -87,20 +89,21 @@ export default function TechniciansScreen({ navigation }) {
     }
 
     const SearchItem = ({ item}) => {
-        
+        // console.log(item.item);
+        // console.log(item.item.id);
       return (
       <TouchableOpacity onPress={()=> {
-        setTechnicianFilterKey(item.item)
+        setTechnicianFilterKey(item.item.id)
         setModalVisible(false)
         setCityFilterKey('')
         setLocation({
-            key : item.item,
-            label : item.item
+            key : item.item.id,
+            label : item.item.title
         })
         }}>
         <Text key={'region_city_'+item.index} style={{marginVertical: 5, backgroundColor: COLORS.white, 
           borderRadius: 2, color: COLORS.green, borderColor: COLORS.green, fontSize: 18,
-          padding: 5}}>{item.item}</Text>
+          padding: 5}}>{item.item.title}</Text>
           <View style={{borderColor: COLORS.green, borderWidth:.5, marginHorizontal: 5}}></View>
       </TouchableOpacity>
       )
@@ -139,10 +142,20 @@ export default function TechniciansScreen({ navigation }) {
                                 shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
                                 backgroundColor: COLORS.white, paddingVertical: 10, paddingHorizontal: 15}}/>
                         </View>
+                        <View style={{  display: 'flex', flexWrap: 'wrap', flexDirection: 'row', paddingHorizontal: 10}}>
+                            {region_list.map((item, index) => (
+                                <TouchableOpacity key={'region_item'+index} style={[style.region_item, item.id == regionIndex? style.active_region_item: {}]}
+                                    onPress={() => setRegionIndex(item.id)} activeOpacity={.7}>
+                                    <Text style={{ color: item.id == regionIndex? COLORS.white : COLORS.green, fontSize: 14, fontWeight: '600'}}>{item.title}</Text>
+                                </TouchableOpacity>
+                            ))}
+                            
+                        </View>
                         <FlatList
-                            data={city_list.filter( title => title.toLowerCase().includes(cityFilterKey.toLowerCase()))}
-                            style={{ paddingHorizontal: 10, minHeight: 100, maxHeight: 550}}
-                            renderItem={(item, index) => <SearchItem item={item} index={index}/>}
+                            data={city_list.filter(city => city.region == regionIndex && regionIndex > 0).filter( city => city.title.toLowerCase().includes(cityFilterKey.toLowerCase()))}
+                            style={{ paddingHorizontal: 10, minHeight: 100, paddingBottom: 0}}
+                            renderItem={(item, index) => <SearchItem item={item} index={index}
+                            ListEmptyComponent={<View style={{ marginBottom: 30}}></View>}/>}
                         />
                 </Modal>
 
@@ -164,7 +177,7 @@ export default function TechniciansScreen({ navigation }) {
                 ListEmptyComponent={<Text style={{
                     textAlign: 'center', fontSize: 18, fontWeight: '500', borderColor: COLORS.green, color: COLORS.green,
                     borderRadius: 5, borderWidth: 2, padding: 15, margin: 15}}>Data Not Found</Text>}
-                numColumns={2} data={technician_list.filter( techni => techni.city.title.toLowerCase().includes(technicianFilterKey.toLowerCase()))}
+                numColumns={2} data={technician_list.filter( techni => techni.city.id == technicianFilterKey || technicianFilterKey == 0)}
                 renderItem={({item}) => <Card technician={item}/>}/>}
             {loading && (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 150}}>
@@ -254,5 +267,13 @@ const style = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
         padding: 15,
+    },
+    region_item : {
+        margin: 2, backgroundColor: COLORS.light, justifyContent: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 10, borderRadius: 25
+    },
+    active_region_item : {
+        backgroundColor: COLORS.green
     }
 })
