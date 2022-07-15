@@ -52,8 +52,8 @@ export default function NewsScreen({ navigation }) {
                 >
                 
                 <View style={{paddingHorizontal: 10}}>
-                    <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.green}}>{news.title}</Text>
-                    <View style={{ marginVertical: 5, alignItems: 'center', justifyContent: 'center', minHeight: 170, maxHeight: 250, backgroundColor: COLORS.dark}}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green}}>{news.title}</Text>
+                    <View style={{ marginVertical: 5, alignItems: 'center', justifyContent: 'center', minHeight: 170, maxHeight: 250, backgroundColor: COLORS.green}}>
                         <Image style={{ flex: 1, resizeMode: 'cover', maxWidth: '100%', minWidth: width - 20, height: '100%', minHeight: 150}} source={image_uri}/>
                     </View>
                     <Text numberOfLines={4} lineHeight={10} style={{fontSize:14, marginRight: 0, color: COLORS.dark}}>{news.description}</Text>
