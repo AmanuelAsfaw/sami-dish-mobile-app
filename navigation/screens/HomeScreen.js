@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <SafeAreaView style={{marginTop: 50,}}>
-            {true&&(<View style={style.header}>
+            <View style={style.header}>
                 <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
                 <View style={{
                     width: 60,
@@ -45,16 +45,7 @@ export default function HomeScreen({ navigation }) {
                 }}>
                     <Image source={app_logo} style={{flex: 1, resizeMode: 'center'}}/>
                 </View>            
-            </View>)}
-            {false&&(<View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
-                <View style={style.searchContainer}>
-                    <Icon name='search' size={25} style={{marginLeft: 5}} color={COLORS.green}/> 
-                    <TextInput placeholder='Search' style={style.input} placeholderTextColor={COLORS.light_green}/>
-                </View>
-                <View style={style.sortBtn}>
-                    <Icon name='sort' size={30} color={COLORS.white}/>
-                </View>
-            </View>)}
+            </View>
             
             {!loading &&(<View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 20}}>
                 <ScrollView horizontal={true}>
@@ -148,8 +139,7 @@ const style = StyleSheet.create({
     productCard: {
         backgroundColor: COLORS.green,
         width,
-        maxHeight: 550,
-        minHeight: 550,
+        height: Dimensions.get('window').height - 160,
         marginBottom: 10 ,
         marginHorizontal: 5,
         borderRadius: 10
