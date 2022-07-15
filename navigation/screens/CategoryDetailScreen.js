@@ -71,13 +71,26 @@ export default function CategoryScreen({ navigation, route }) {
     const CategoryList = () => {
         return (
             <View style={style.categoryContainer}>
-                <ScrollView horizontal={true} style={{flex: 1}} showsHorizontalScrollIndicator={false}>
+                {true && (<ScrollView horizontal={true} style={{flex: 1}} 
+                    showsHorizontalScrollIndicator={false} 
+                    disableIntervalMomentum={true}
+                    decelerationRate={'fast'}>
                     {category_list.map((item,index) => (
                         <TouchableOpacity key={index} onPress={() => setCategoryIndex(item.id)} activeOpacity={.9}>
                             <Text key={index} style={[style.categoryText, categoryIndex == item.id && style.categoryTextSelected]}>{item.title}</Text>
                         </TouchableOpacity>
                     ))}
-                </ScrollView>
+                </ScrollView>)}
+                {false && (<FlatList
+                horizontal={true}
+                data={category_list}
+                fiex
+                renderItem={({item, index}) => (
+                    <TouchableOpacity key={index} onPress={() => setCategoryIndex(item.id)} activeOpacity={.9} style={{ paddingHorizontal: 2}}>
+                        <Text key={index} style={[style.categoryText, categoryIndex == item.id && style.categoryTextSelected]}>{item.title}</Text>
+                    </TouchableOpacity>
+                )}
+                />)}
             </View>
         )
     }
@@ -121,7 +134,7 @@ export default function CategoryScreen({ navigation, route }) {
         )
     }
     return (
-        <SafeAreaView style={{marginTop: 50,}}>
+        <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white}}>
             <View style={style.header}>
                 <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
                 <View style={{
@@ -185,6 +198,7 @@ const style = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         backgroundColor: '#fff',
+        shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
     },
     searchContainer: {
         height: 50,
@@ -192,7 +206,8 @@ const style = StyleSheet.create({
         borderRadius: 10,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
     },
     input: {
         fontSize: 18,
@@ -217,6 +232,7 @@ const style = StyleSheet.create({
         backgroundColor: COLORS.white,
         paddingLeft: 2,
         paddingVertical: 5,
+        shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
     },
     categoryText: {
         paddingRight: 10,
