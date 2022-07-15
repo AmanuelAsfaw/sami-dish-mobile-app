@@ -6,7 +6,7 @@
 
 ## Live Demo
 ![Alt Text](/sample-data/demo.gif)
-- [Live link](samidish.info)
+- [Live link](https://samidish.info)
 ).
 
 ### Features implemented so far are:
