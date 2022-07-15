@@ -30,8 +30,8 @@ export default function TechnicianDetailScreen({ navigation, route }) {
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
-                <TouchableOpacity onPress={back_to()} activeOpacity={.5}>
-                    <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}} onPress={() => Alert.alert('text')}>Sami-Dish</Text>
+                <TouchableOpacity activeOpacity={.5}>
+                    <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>Sami-Dish</Text>
                 </TouchableOpacity>
                 
                 <View style={{
@@ -43,23 +43,28 @@ export default function TechnicianDetailScreen({ navigation, route }) {
                     <Image source={app_logo} style={{flex: 1, resizeMode: 'center'}}/>
                 </View>            
             </View>
-            <View style={{flex: 0, flexDirection: 'row', marginLeft: 5}}>
+            <View style={{flex: 0, flexDirection: 'row', margin: 5}}>
             <View style={style.productCard}>
                 <View style={{
-                    height: 250,
+                    height: width -48,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 50,
-                    maxWidth: width -50,
-                    borderRadius: 50
+                    width: width -48,
+                    borderRadius: width -48,
+                    borderWidth: 1,
+                    alignSelf: 'center',
+                    borderColor: COLORS.white,
+                    padding: 1,
                 }}>
-                    <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width - 70, paddingHorizontal: 10, borderRadius: 150, marginLeft: 45, borderWidth: 1, borderColor: COLORS.white}} 
+                    <Image style={{ flex: 1, resizeMode: 'contain', width: width - 50, height: width - 50,
+                        borderRadius: width - 50, borderWidth: .51, borderColor: COLORS.white}} 
                         source={{uri : DOMAIN_NAME + technician.photo}}/>
                 </View>
                 
                 <Text style={{ fontSize: 28, fontWeight: 'bold', color: COLORS.white, textAlign: 'center', paddingTop: 15}}>{technician.first_name +' '+ technician.middle_name}</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500', textAlign: 'center'}}>{technician.region.title}</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 30, fontWeight: '300', textAlign: 'center'}}>{technician.city.title}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500', textAlign: 'center'}}>{technician.region? technician.region.title: ''}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 30, fontWeight: '300', textAlign: 'center'}}>{technician.city? technician.city.title: ''}</Text>
                 
                 <TouchableOpacity onPress={() => forwardToCall('+251964359872')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Icon name='phone' size={30} color={COLORS.white}/>
@@ -85,8 +90,7 @@ const style = StyleSheet.create({
         backgroundColor: COLORS.green,
         width,
         marginVertical: 10,
-        maxHeight: 550,
-        minHeight: 550,
+        height: Dimensions.get('window').height - 160,
         marginBottom: 10 ,
         marginLeft: 15,
         borderRadius: 10
