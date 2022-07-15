@@ -13,21 +13,25 @@ const width = Dimensions.get('screen').width - 40
 
 const app_logo = require('../../assets/app.png')
 
-export default function SoftwaresScreen({ navigation }) {
+export default function SoftwaresScreen({ navigation, route }) {
+    const { brand, brand_id } = route.params
     const [expandSoft, setExpandSoft] = React.useState(null)
     const [downloadProgressPercent, setDownloadProgress] = React.useState(0)
     const [software_list, setSoftwareList] = React.useState([])
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
+        console.log('try to get useEffect');
         getSoftwares()
-    }, [])
+    }, [brand_id])
 
     async function getSoftwares(){
         setLoading(true)
-        axios.get(FETCH_SOFTWARE_LIST)
+        console.log(FETCH_SOFTWARE_LIST+brand_id);
+        axios.get(FETCH_SOFTWARE_LIST+brand_id)
         .then((response) => {
             if(response.data &&  response.status && response.data.success){
+                console.log(response.data)
                 setLoading(false)
                 setSoftwareList(response.data.software_data)
             }
@@ -44,7 +48,7 @@ export default function SoftwaresScreen({ navigation }) {
     
     const ShowDownloadIicon = ({id, link}) => {
         
-        if(id % 3 == 0){
+        if(id === -1){
             return (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <LottieView source={require('../../assets/98657-loader.json')} 
@@ -53,7 +57,7 @@ export default function SoftwaresScreen({ navigation }) {
                         <Text style={{paddingLeft: 10, color: COLORS.white, fontSize: 18}}>{(downloadProgressPercent * 100).toFixed(2)}%</Text>
                 </View>
             )
-        } else if (id % 2 === 0){
+        } else if (id === -2){
             return(
                 <Icon name='check-circle' size={20} color={COLORS.white} style={{borderRadius: 10}}/>
             )
@@ -106,26 +110,27 @@ export default function SoftwaresScreen({ navigation }) {
         }
         else{
             return (
-                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{ flex: 1, flexDirection: 'row', paddingVertical: 10, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
+                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{ flex: 1, flexDirection: 'row', paddingVertical: 0, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
                     >
                     <View style={{ 
-                        maxHeight: 100,
+                        maxHeight: 70,
                         borderRadius: 15,
                         alignItems: 'center', 
                         justifyContent: 'center',
+                        paddingLeft: 15
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain',minWidth: 80}} 
+                        <Image style={{ flex: 1, resizeMode: 'contain', width: 60, height: 60, maxHeight: 60, borderRadius: 60, paddingLeft: 0} }
                             source={image_uri}/>
                     </View>  
-                    <View style={{paddingHorizontal: 10, marginHorizontal: 0}}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold', color: COLORS.green, }}>{software.title} s</Text>
+                    <View style={{paddingHorizontal: 10, marginHorizontal: 0, marginRight: 70, paddingTop: 20}}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.green, justifyContent: 'space-evenly'}}>{software.title}</Text>
                             <View style={{ 
-                                flex: 1, flexDirection: 'row', justifyContent: 'space-between',
-                                alignItems: 'center', minWidth: 150}}>
-                                <View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 0, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
+                                flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignSelf: 'flex-start',
+                                alignItems: 'center', minWidth: 230}}>
+                                {false && (<View style={{backgroundColor: COLORS.green, alignItems: 'flex-start', marginRight: 0, alignSelf: 'flex-start', marginVertical: 10, borderRadius: 40, padding: 5}}>
                                     <ShowDownloadIicon id={software.id} link={software.file}/>
-                                </View>
-                                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{justifyContent: 'flex-end'}}>
+                                </View>)}
+                                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{justifyContent: 'flex-end', alignSelf: 'flex-end'}}>
                                     <Icon name='expand-more' size={45} color={COLORS.green}/>
                                 </TouchableOpacity>
                             </View>
@@ -137,7 +142,7 @@ export default function SoftwaresScreen({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={{marginTop: 50,}}>
+        <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white, minHeight: 650}}>
             <View style={style.header}>
                 <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
                 <View style={{
@@ -181,6 +186,7 @@ const style = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         backgroundColor: '#fff',
+        shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
     },
     productCard: {
         backgroundColor: COLORS.green,
