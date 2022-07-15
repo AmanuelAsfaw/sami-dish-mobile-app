@@ -9,7 +9,6 @@ const app_logo = require('../../assets/app.png')
 
 export default function NewsDetailScreen({ navigation, route }) {
     const { news, imageList } = route.params
-    const [newsImageList, setNewsImageList] = React.useState(imageList)
 
     React.useLayoutEffect(() => {
         navigation.setOptions({headerShown: false});
@@ -30,7 +29,7 @@ export default function NewsDetailScreen({ navigation, route }) {
                 </View>            
             </View>
             
-            <SliderBox images={newsImageList}/>
+            <SliderBox images={imageList}/>
             <View style={{marginTop: 5, marginHorizontal: 30, marginVertical: 20}}>
                 <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.green, textAlign: 'center', marginVertical: 10}}>{news.title}</Text>
                 <Text style={{}}>{news.description}</Text>
