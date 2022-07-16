@@ -45,6 +45,12 @@ export default function TechnicianDetailScreen({ navigation, route }) {
             </View>
             <View style={{flex: 0, flexDirection: 'row', margin: 5}}>
             <View style={style.productCard}>
+                <TouchableOpacity style={{backgroundColor: COLORS.green, margin: 5, width: 40}} activeOpacity={.7}
+                    onPressOut={() => {
+                        navigation.navigate('RegionTechnicians', { city_id: technician.city.id, region_id: technician.region.id})
+                        }}>
+                    <Icon name='chevron-left' color={COLORS.white} size={35}/>
+                </TouchableOpacity>
                 <View style={{
                     height: width -48,
                     alignItems: 'center',
