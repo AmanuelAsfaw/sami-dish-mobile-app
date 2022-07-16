@@ -7,7 +7,7 @@ export const FETCH_SOFTWARE_LIST = DOMAIN_NAME+'/mobile_api/softwares/'
 
 export const FETCH_NEWS_LIST = DOMAIN_NAME+'/mobile_api/news'
 
-export const FETCH_TECHNICIANS_LIST = DOMAIN_NAME + '/mobile_api/technicians'
+export const FETCH_TECHNICIANS_LIST = DOMAIN_NAME + '/mobile_api/technicians/'
 
 export const FETCH_HOME_CATEGORY_LIST = DOMAIN_NAME + '/mobile_api/categories'
 
@@ -16,3 +16,7 @@ export const FETCH_HOME_PRODUCT_LIST = DOMAIN_NAME + '/mobile_api/products/'
 export const FETCH_HOME_SEARCH_PRODUCT_LIST = DOMAIN_NAME + '/mobile_api/search_product/'
 
 export const FETCH_SOFTWARE_BRAND_LIST = DOMAIN_NAME + '/mobile_api/software_brands'
+
+export const FETCH_REGION_LIST = DOMAIN_NAME + '/mobile_api/regions'
+
+export const FETCH_CITY_LIST = DOMAIN_NAME + '/mobile_api/cities/'
