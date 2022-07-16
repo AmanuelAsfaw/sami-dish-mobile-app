@@ -48,7 +48,10 @@ export default function NewsScreen({ navigation }) {
         }
 
         return (
-            <View style={{ flex: .1, flexDirection: 'column', backgroundColor: COLORS.light, borderRadius: 5, marginBottom: 5}}
+            <View style={{ flex: .1, flexDirection: 'column', backgroundColor: COLORS.white, 
+                borderRadius: 5, margin: 5,
+                shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
+            }}
                 >
                 
                 <View style={{paddingHorizontal: 10}}>
