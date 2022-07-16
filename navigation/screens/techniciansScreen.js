@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, SafeAreaView, Image, StyleSheet, TextInput, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, SafeAreaView, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import COLORS from '../../sample-data/COLORS';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,36 +12,36 @@ const width = Dimensions.get('screen').width
 
 const app_logo = require('../../assets/app.png')
 
-export default function TechniciansScreen({ navigation }) {
+export default function TechniciansScreen({ navigation, route }) {
+    const { city_id, region_id } = route.params
     const [location, setLocation] = React.useState({ key: null, label: null}) 
     const [loading, setLoading] = React.useState(false)
     const [technician_list, setTechnicianList] = React.useState([])
-    const [city_list, setCityList] = React.useState([])
+    const [city_data, setCityData] = React.useState([])
     const [region_list, setRegionList] = React.useState([])
     const [cityFilterKey, setCityFilterKey] = React.useState('')
     const [technicianFilterKey, setTechnicianFilterKey] = React.useState(0)
-    const [regionIndex, setRegionIndex] = React.useState(0)
 
 
     const [modalVisible, setModalVisible] = React.useState(false)
 
     React.useLayoutEffect(() => {
-        navigation.setOptions({headerShown: false});
-        getDataSet()
+        navigation.setOptions({headerShown: false})
       }, [navigation])
     
-    async function getDataSet(){
+    React.useEffect(() => {
+        getTechnicianList()
+    }, [city_id])
+
+    async function getTechnicianList(){
         setLoading(true)
-        axios.get(FETCH_TECHNICIANS_LIST)
+        axios.get(FETCH_TECHNICIANS_LIST+city_id)
         .then((response) => {
             if(response.data &&  response.status && response.data.success){
               setLoading(false)
               setTechnicianList(response.data.technician_data)
               
-              setRegionList(response.data.region_data)
-              setRegionIndex(response.data.region_data[0].id)
-              
-              setCityList(response.data.city_data)
+              setCityData(response.data.city_data)
             }
         })
         .catch((error) => {
@@ -59,16 +59,17 @@ export default function TechniciansScreen({ navigation }) {
                             width: width/2 -70, height: width/2 -70, backgroundColor: COLORS.light,
                             borderRadius: width/2 - 70, borderColor: COLORS.white, borderWidth: 2}} source={ { uri : DOMAIN_NAME+technician.photo}}/>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10}}>{technician.first_name+ ' '+technician.middle_name}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10, color: COLORS.green}}>{technician.first_name+ ' '+technician.middle_name}</Text>
                     <View style={{
                         justifyContent: 'space-between',
-                        marginTop: 5
+                        marginTop: 5,
+                        flex: 2
                     }}>
-                        <Text style={{ fontSize: 16, fontWeight: '300'}}>{technician.region? technician.region.title: ''}</Text>
-                        <Text style={{ fontSize: 12, fontWeight: '300'}}>{technician.city? technician.city.title: ''}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.green}}>{technician.region? technician.region.title: ''}</Text>
+                        <Text style={{ fontSize: 12, fontWeight: '400', color: COLORS.green}}>{technician.city? technician.city.title: ''}</Text>
                         
                     </View>
-                    <View>
+                    <View style={{ flex: 1}}>
                     <TouchableOpacity onPress={() => navigation.navigate('TechnicianDetail', technician)} style={{
                             height: 35,
                             width: 35,
@@ -83,33 +84,12 @@ export default function TechniciansScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     </TouchableOpacity>
-                    
             </View>
         )
     }
 
-    const SearchItem = ({ item}) => {
-        // console.log(item.item);
-        // console.log(item.item.id);
-      return (
-      <TouchableOpacity onPress={()=> {
-        setTechnicianFilterKey(item.item.id)
-        setModalVisible(false)
-        setCityFilterKey('')
-        setLocation({
-            key : item.item.id,
-            label : item.item.title
-        })
-        }}>
-        <Text key={'region_city_'+item.index} style={{marginVertical: 5, backgroundColor: COLORS.white, 
-          borderRadius: 2, color: COLORS.green, borderColor: COLORS.green, fontSize: 18,
-          padding: 5}}>{item.item.title}</Text>
-          <View style={{borderColor: COLORS.green, borderWidth:.5, marginHorizontal: 5}}></View>
-      </TouchableOpacity>
-      )
-    }
     return (
-        <SafeAreaView style={{marginTop: 50}}>
+        <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white}}>
             <View style={style.header}>
                 <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
                 <View style={{
@@ -120,53 +100,10 @@ export default function TechniciansScreen({ navigation }) {
                 }}>
                     <Image source={app_logo} style={{flex: 1, resizeMode: 'center'}}/>
                 </View>            
-            </View>
-            <View style={{marginTop: 1, flexDirection: 'row', backgroundColor: COLORS.white, paddingHorizontal: 10, paddingVertical: 5}}>
-                <Modal
-                    animationType='slide'      
-                    visible={modalVisible}            
-                    style={{ margin: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.white}}>
-                        <View style={{marginVertical: 10, marginTop: 0, marginHorizontal: 5, backgroundColor: COLORS.white, padding: 10, paddingTop: 10}}>
-                            <TouchableOpacity onPress={() => {
-                                        setModalVisible(false)                                        
-                                        setCityFilterKey('')
-                                    }}
-                                    style={{marginBottom: 10}}
-                                    >
-                                        <Icon name='arrow-back' size={30} style={{fontWeight: 'bold'}} color={COLORS.green}/>
-                            </TouchableOpacity>
-                            
-                            <TextInput placeholder='Search' placeholderTextColor={'#1fd655'} 
-                              onChangeText={(text) => setCityFilterKey(text)}
-                              style={{ paddingTop: 10 , fontSize: 20, color: COLORS.green, borderRadius: 25,
-                                shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 15}, elevation: 6,
-                                backgroundColor: COLORS.white, paddingVertical: 10, paddingHorizontal: 15}}/>
-                        </View>
-                        <View style={{  display: 'flex', flexWrap: 'wrap', flexDirection: 'row', paddingHorizontal: 10}}>
-                            {region_list.map((item, index) => (
-                                <TouchableOpacity key={'region_item'+index} style={[style.region_item, item.id == regionIndex? style.active_region_item: {}]}
-                                    onPress={() => setRegionIndex(item.id)} activeOpacity={.7}>
-                                    <Text style={{ color: item.id == regionIndex? COLORS.white : COLORS.green, fontSize: 14, fontWeight: '600'}}>{item.title}</Text>
-                                </TouchableOpacity>
-                            ))}
-                            
-                        </View>
-                        <FlatList
-                            data={city_list.filter(city => city.region == regionIndex && regionIndex > 0).filter( city => city.title.toLowerCase().includes(cityFilterKey.toLowerCase()))}
-                            style={{ paddingHorizontal: 10, minHeight: 100, paddingBottom: 0}}
-                            renderItem={(item, index) => <SearchItem item={item} index={index}
-                            ListEmptyComponent={<View style={{ marginBottom: 30}}></View>}/>}
-                        />
-                </Modal>
-
-                <TouchableOpacity style={style.sortBtn} onPress={() => setModalVisible(true)}>
-                    <Icon name='sort' size={30} color={COLORS.white}/>
-                    <Text style={{ color: COLORS.white, fontSize: 22}}>{location.key? location.label:'Filter By City'}</Text>
-                </TouchableOpacity>                
-            </View>
+            </View>  
             
             { !loading && <FlatList 
-                style={{backgroundColor: COLORS.white, marginBottom: 100}}
+                style={{backgroundColor: COLORS.white, marginBottom: 70}}
                 columnWrapperStyle={{justifyContent: 'space-between'}}
                 showsVerticalScrollIndicator={true}
                 contentContainerStyle={{
@@ -174,6 +111,14 @@ export default function TechniciansScreen({ navigation }) {
                     paddingBottom: 50,
                     marginHorizontal: 10
                 }}
+                ListHeaderComponent={
+                    <TouchableOpacity style={{backgroundColor: COLORS.white, marginBottom: 10, width: 40}} activeOpacity={.7}
+                        onPressOut={() => {
+                            navigation.navigate('CityScreen', { region_id})
+                            }}>
+                        <Icon name='chevron-left' color={COLORS.green} size={35}/>
+                    </TouchableOpacity>
+                }
                 ListEmptyComponent={<Text style={{
                     textAlign: 'center', fontSize: 18, fontWeight: '500', borderColor: COLORS.green, color: COLORS.green,
                     borderRadius: 5, borderWidth: 2, padding: 15, margin: 15}}>Data Not Found</Text>}
@@ -198,6 +143,8 @@ const style = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         backgroundColor: '#fff',
+        shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 15, height: 45}, elevation: 6,
+        marginBottom: 5
     },
     searchContainer: {
         height: 50,
@@ -260,13 +207,14 @@ const style = StyleSheet.create({
         borderRadius: 10
     },
     card: {
-        minHeight: 255,
-        backgroundColor: COLORS.light,
+        height: 300,
+        backgroundColor: COLORS.light_green,
         width: width/2 -30,
         marginHorizontal: 10,
         borderRadius: 10,
         marginBottom: 10,
         padding: 15,
+        shadowColor: COLORS.dark, shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
     },
     region_item : {
         margin: 2, backgroundColor: COLORS.light, justifyContent: 'center',
