@@ -10,7 +10,8 @@ const width = Dimensions.get('screen').width
 const app_logo = require('../../assets/app.png')
 
 const ProductDetailScreen = ({navigation, route}) => {
-  const plant = route.params;
+  const {product, category_list} = route.params;
+  console.log(route.params);
   const tg_username = 'namingishard' 
   const [quantity, setQuantity] = React.useState(1)
   const [imageList, setImageList] = React.useState([])
@@ -20,17 +21,17 @@ const ProductDetailScreen = ({navigation, route}) => {
   }, [navigation])
 
   React.useEffect(() => {
-    if(plant && plant.product_file_set && plant.product_file_set.length){
+    if(product && product.product_file_set && product.product_file_set.length){
       const images = []
-      plant.product_file_set.forEach(element => {
+      product.product_file_set.forEach(element => {
         images.push(DOMAIN_NAME + element.file)
       })
       setImageList(images)
     }
-  }, [plant])
+  }, [product])
 
   const forwardToTelegram = useCallback(async() => {
-    const text = plant.title + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(plant.price * quantity)
+    const text = product.title + ' \n'+ 'Quantity: '+quantity+'\n'+ 'Total Price: '+(product.price * quantity)
     const url = "https://t.me/samidish_info/url?new&text=asd"
     const supported = await Linking.canOpenURL(url)
     if(supported){
@@ -60,11 +61,18 @@ const ProductDetailScreen = ({navigation, route}) => {
                     <Image source={app_logo} style={{flex: 1, resizeMode: 'center'}}/>
                 </View> 
       </View>
+      <TouchableOpacity style={{backgroundColor: COLORS.white, width: 40}} activeOpacity={.7}
+          onPressOut={() => {
+              navigation.navigate('Category', {category_data: product.category, category_list, category_id: product.category.id})
+              }}>
+          <Icon name='chevron-left' color={COLORS.green} size={35}/>
+        </TouchableOpacity>
       <View style={style.imageContainer}>
+        
         <SliderBox 
           images={
-            plant?
-              plant.product_file_set.map((product_file) =>  DOMAIN_NAME + product_file.file)
+            product?
+              product.product_file_set.map((product_file) =>  DOMAIN_NAME + product_file.file)
             :[
               require('../../assets/app.png'),
               require('../../assets/app.png')
@@ -87,7 +95,7 @@ const ProductDetailScreen = ({navigation, route}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 22, fontWeight: 'bold'}}>{plant.title}</Text>
+          <Text style={{fontSize: 22, fontWeight: 'bold'}}>{product.title}</Text>
           <View style={style.priceTag}>
             <Text
               style={{
@@ -96,7 +104,7 @@ const ProductDetailScreen = ({navigation, route}) => {
                 fontWeight: 'bold',
                 fontSize: 16,
               }}>
-              {plant.price} ETB
+              {product.price} ETB
             </Text>
           </View>
         </View>
@@ -109,7 +117,7 @@ const ProductDetailScreen = ({navigation, route}) => {
               lineHeight: 22,
               marginTop: 10,
             }}>
-            {plant.description}
+            {product.description}
           </Text>
           <View
             style={{
@@ -166,7 +174,7 @@ const style = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 0,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F4F4F4',
