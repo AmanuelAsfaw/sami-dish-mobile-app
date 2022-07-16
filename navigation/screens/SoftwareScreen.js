@@ -21,17 +21,14 @@ export default function SoftwaresScreen({ navigation, route }) {
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
-        console.log('try to get useEffect');
         getSoftwares()
     }, [brand_id])
 
     async function getSoftwares(){
         setLoading(true)
-        console.log(FETCH_SOFTWARE_LIST+brand_id);
         axios.get(FETCH_SOFTWARE_LIST+brand_id)
         .then((response) => {
             if(response.data &&  response.status && response.data.success){
-                console.log(response.data)
                 setLoading(false)
                 setSoftwareList(response.data.software_data)
             }
@@ -82,7 +79,15 @@ export default function SoftwaresScreen({ navigation, route }) {
         
         if(software.id == expandSoft){
             return(
-                <View style={{ flex: 1, backgroundColor: COLORS.light, paddingTop: 90, marginBottom: 5, justifyContent: 'center', alignItems: 'center'}}
+                <View style={{  paddingTop: 90, marginBottom: 5, justifyContent: 'center', alignItems: 'center',
+                flex: 1, flexDirection: 'column',
+                    alignItems: 'center', margin: 5,
+                    marginVertical: 10,
+                    borderRadius: 10,
+                    backgroundColor: COLORS.white,
+                    padding: 15,
+                    shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
+            }}
                     >
                     <View style={{ 
                         maxHeight: 150, 
@@ -110,14 +115,25 @@ export default function SoftwaresScreen({ navigation, route }) {
         }
         else{
             return (
-                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{ flex: 1, flexDirection: 'row', paddingVertical: 0, backgroundColor: COLORS.light, marginBottom: 5, position: 'relative' } }
+                <TouchableOpacity onPress={() => setExpandSoft(software.id)} style={{ 
+                    flex: 1, flexDirection: 'row',
+                    alignItems: 'center', margin: 5,
+                    marginVertical: 10,
+                    borderRadius: 10,
+                    backgroundColor: COLORS.white,
+                    padding: 15,
+                    shadowColor: '#00c04b', shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
+
+                }}
                     >
                     <View style={{ 
-                        maxHeight: 70,
-                        borderRadius: 15,
+                        height: 70,
+                        width: 70,                        
+                        borderRadius: 70,
                         alignItems: 'center', 
                         justifyContent: 'center',
-                        paddingLeft: 15
+                        paddingLeft: 0,
+                        backgroundColor: COLORS.light_green
                         }}>
                         <Image style={{ flex: 1, resizeMode: 'contain', width: 60, height: 60, maxHeight: 60, borderRadius: 60, paddingLeft: 0} }
                             source={image_uri}/>
