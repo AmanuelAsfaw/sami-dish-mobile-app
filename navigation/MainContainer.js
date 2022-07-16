@@ -15,18 +15,23 @@ import CategoryScreen from './screens/CategoryDetailScreen';
 import TechnicianDetailScreen from './screens/TechnicianDetailScreen';
 import NewsDetailScreen from './screens/NewsDetailScreen';
 import SoftwareBrandScreen from './screens/SoftwareBrandScreen';
+import RegionScreen from './screens/RegionScreen';
+import CityScreen from './screens/CityScreen';
+import COLORS from '../sample-data/COLORS';
 
 //Screen names
 const homeName = "Home";
 const newsName = "News";
-const technicianName = "Technicians"
+const technicianName = "RegionTechnicians"
 const settingsName = "Settings";
-const softwaresName = 'Softwares'
+const softwaresName = 'BrandSoftwares'
 const ProductDetail = 'ProductDetail'
 const CetegoryName = 'Category'
 const TechnicianDetail = 'TechnicianDetail'
 const NewsDetail = 'NewsDetail'
-const SoftwareBrand = 'SoftwareBrand'
+const SoftwareBrand = 'Software'
+const RegionName = 'Technicians'
+const CityName = 'CityScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -49,7 +54,7 @@ function MainContainer() {
 
             } else if (rn === settingsName) {
               iconName = focused ? 'settings' : 'settings-outline';
-            } else if (rn === technicianName){
+            } else if (rn === RegionName){
                 iconName = focused? 'build': 'build-outline'
             } else if (rn === SoftwareBrand){
                 iconName = focused? 'download': 'download-outline'
@@ -61,13 +66,13 @@ function MainContainer() {
         })}
         tabBarOptions={{
           activeTintColor: 'green',
-          inactiveTintColor: 'grey',
+          inactiveTintColor: '#83BD75',          
           labelStyle: { paddingBottom: 10, fontSize: 10 },
           style: { padding: 10, height: 70}
         }}>
 
         <Tab.Screen name={homeName} component={HomeScreen} />
-        <Tab.Screen name={technicianName} component={TechniciansScreen} />
+        <Tab.Screen name={RegionName} component={RegionScreen} />
         <Tab.Screen name={newsName} component={NewsScreen} />
         <Tab.Screen name={SoftwareBrand} component={SoftwareBrandScreen} />
         <Tab.Screen name={CetegoryName} component={CategoryScreen} 
@@ -91,6 +96,16 @@ function MainContainer() {
             tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
           }}/>
         <Tab.Screen name={softwaresName} component={SoftwaresScreen} 
+          options={{
+            // tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
+        <Tab.Screen name={CityName} component={CityScreen} 
+          options={{
+            // tabBarVisible: false, //like this
+            tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
+          }}/>
+        <Tab.Screen name={technicianName} component={TechniciansScreen} 
           options={{
             // tabBarVisible: false, //like this
             tabBarButton: (props) => null, //this is additional if you want to hide the tab element from the bottom nav
