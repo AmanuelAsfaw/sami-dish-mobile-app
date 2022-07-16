@@ -103,20 +103,20 @@ export default function CategoryScreen({ navigation, route }) {
         }
         return (
             <View>
-                <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={style.card}>
-                    <View style={{ height: 100, alignItems: 'center'}}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width/2 -70}} source={image_uri}/>
+                <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', {product, category_list})} style={style.card}>
+                    <View style={{ height: 100, width: width/2 -70, alignItems: 'center', borderColor: COLORS.white, borderWidth: 0, alignSelf: 'center'}}>
+                        <Image style={{ flex: 1, resizeMode: 'contain', height: 100, width: width/2 -72, borderColor: COLORS.white, borderWidth: 1.5}} source={image_uri}/>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10}}>{product.title}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10, color: COLORS.green }}>{product.title}</Text>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: 5
                     }}>
-                        <Text style={{ fontSize: 19, fontWeight: '300'}}>{product.price} ETB</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.green  }}>{product.price} ETB</Text>
                     </View>
                     <View>
-                        <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', product)} style={{
+                        <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', {product, category_list})} style={{
                                 height: 35,
                                 width: 35,
                                 backgroundColor: COLORS.green,
@@ -261,11 +261,12 @@ const style = StyleSheet.create({
     },
     card: {
         height: 255,
-        backgroundColor: COLORS.light,
+        backgroundColor: COLORS.light_green,
         width: width/2 -30,
         marginHorizontal: 10,
         borderRadius: 10,
         marginBottom: 10,
         padding: 15,
+        shadowColor: COLORS.dark, shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
     }
 })
