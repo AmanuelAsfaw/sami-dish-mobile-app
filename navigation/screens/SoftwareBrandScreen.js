@@ -39,32 +39,37 @@ export default function SoftwareBrandScreen({ navigation }) {
         
         return (
             <View>
-                <TouchableOpacity style={style.card} onPress={() => navigation.navigate('Softwares', { brand: brand, brand_id: brand.id })}>
+                <TouchableOpacity style={style.card} onPress={() => navigation.navigate('BrandSoftwares', { brand: brand, brand_id: brand.id })}>
                     <View style={{ height: 100, alignItems: 'center', borderRadius: 100}}>
                         <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width/2 -70, backgroundColor: COLORS.light,
                           borderTopLeftRadius: 10, borderTopRightRadius: 10, borderColor: COLORS.white, borderWidth: 2}}
                           source={ { uri : DOMAIN_NAME+ brand.image}}/>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10}}>{brand.title}</Text>
+
+                    <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10, color: COLORS.green}}>{brand.title}</Text>
+
                     <View style={{
                         justifyContent: 'space-between',
-                        marginTop: 5
+                        marginTop: 5,
+                        flex: 3
                     }}>
-                        <Text style={{ fontSize: 12, fontWeight: '300'}}>{brand.description}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '400',  color: COLORS.green}}>{brand.description}</Text>
                         
                     </View>
-                    <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('Softwares', { brand: brand, brand_id: brand.id })} style={{
+                    <View style={{ flex: 1}}>
+                        <TouchableOpacity onPress={() => navigation.navigate('BrandSoftwares', { brand: brand, brand_id: brand.id })} style={{
                             height: 35,
                             width: 35,
-                            backgroundColor: COLORS.light,
+                            backgroundColor: COLORS.light_green,
                             borderRadius: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
                             alignContent: 'center',
-                            alignSelf:'flex-end'
+                            alignSelf:'flex-end',
+                            marginBottom: -15,
+                            marginRight: -15
                         }}>
-                            <Icon name='arrow-forward' color={COLORS.green} size={35}/>
+                            <Icon name='chevron-right' color={COLORS.green} size={35}/>
                         </TouchableOpacity>
                     </View>
                     </TouchableOpacity>
@@ -119,6 +124,8 @@ const style = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         backgroundColor: '#fff',
+        marginBottom: 5,
+        shadowColor: COLORS.green, shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
     },
     searchContainer: {
         height: 50,
@@ -182,11 +189,13 @@ const style = StyleSheet.create({
     },
     card: {
         minHeight: 255,
-        backgroundColor: COLORS.light,
+        backgroundColor: COLORS.light_green,
         width: width/2 -30,
         marginHorizontal: 10,
         borderRadius: 10,
         marginBottom: 10,
         padding: 15,
+        flex: 1,
+        shadowColor: COLORS.dark, shadowOpacity: .8, shadowOffset: { width: 35, height: 35}, elevation: 16,
     }
 })
