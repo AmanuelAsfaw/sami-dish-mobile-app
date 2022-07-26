@@ -9,8 +9,13 @@ import LottieView from 'lottie-react-native';
 import { DOMAIN_NAME, FETCH_HOME_CATEGORY_LIST } from '../../sample-data/constants';
 
 
-const width = Dimensions.get('screen').width - 40
-
+const width = Dimensions.get('window').width - 40
+console.log(
+    'screen width size'+ Dimensions.get('screen').width
+);
+console.log(
+    'window width size'+ Dimensions.get('window').width
+);
 const app_logo = require('../../assets/app.png')
 
 export default function HomeScreen({ navigation }) {
@@ -36,7 +41,7 @@ export default function HomeScreen({ navigation }) {
     return (
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 <View style={{
                     width: 60,
                     height: 60,
@@ -47,7 +52,7 @@ export default function HomeScreen({ navigation }) {
                 </View>            
             </View>
             
-            {!loading &&(<View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 20}}>
+            {!loading &&(<View style={{flex: 0, flexDirection: 'row', marginLeft: 5, marginTop: 10}}>
                 <ScrollView horizontal={true}>
                     {category_list.map((item, index) => (
                         <TouchableOpacity key={index} onPress={() => navigation.navigate('Category', {category_data:item, category_list, category_id: item.id})}>
@@ -57,12 +62,14 @@ export default function HomeScreen({ navigation }) {
                                 <View style={{
                                     height: 250,
                                     alignItems: 'center',
-                                    marginTop: 50,
-                                    maxWidth: width -50
+                                    marginTop: 5,
+                                    maxWidth: width -50,
+                                    backgroundColor: COLORS.green,
+                                    marginLeft: 25
                                 }}>
                                     <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width - 70, paddingHorizontal: 10}} source={{uri: DOMAIN_NAME + item.image}}/>
                                 </View>
-                                <Text style={{ paddingHorizontal: 10, color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500'}}>{item.description}</Text>
+                                <Text style={{ paddingHorizontal: 10, color: COLORS.white, fontSize: 18, marginTop: 40, fontWeight: '500', alignContent: 'center'}}>{item.description}</Text>
                             </View>
                         </TouchableOpacity>                        
                     ))}
@@ -139,7 +146,7 @@ const style = StyleSheet.create({
     productCard: {
         backgroundColor: COLORS.green,
         width,
-        height: Dimensions.get('window').height - 160,
+        height: Dimensions.get('window').height - 210,
         marginBottom: 10 ,
         marginHorizontal: 5,
         borderRadius: 10
