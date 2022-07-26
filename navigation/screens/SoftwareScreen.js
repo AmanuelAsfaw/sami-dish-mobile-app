@@ -9,7 +9,7 @@ import LottieView from 'lottie-react-native';
 import axios from 'axios';
 import { DOMAIN_NAME, FETCH_SOFTWARE_LIST } from '../../sample-data/constants';
 
-const width = Dimensions.get('screen').width - 40
+const width = Dimensions.get('window').width - 40
 
 const app_logo = require('../../assets/app.png')
 
@@ -79,7 +79,7 @@ export default function SoftwaresScreen({ navigation, route }) {
         
         if(software.id == expandSoft){
             return(
-                <View style={{  paddingTop: 90, marginBottom: 5, justifyContent: 'center', alignItems: 'center',
+                <View style={{  paddingTop: 20, paddingHorizontal: 5, marginBottom: 5, justifyContent: 'center', alignItems: 'center',
                 flex: 1, flexDirection: 'column',
                     alignItems: 'center', margin: 5,
                     marginVertical: 10,
@@ -91,17 +91,18 @@ export default function SoftwaresScreen({ navigation, route }) {
                     >
                     <View style={{ 
                         maxHeight: 150, 
-                        backgroundColor: COLORS.dark,
+                        backgroundColor: COLORS.white,
                         alignItems: 'center', 
                         justifyContent: 'center'
                         }}>
-                        <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width -50}} source={image_uri}/>
+                        <Image style={{ flex: 1, resizeMode: 'contain', minWidth: width -50 }} source={image_uri}/>
                     </View>  
-                    <View style={{paddingHorizontal: 10}}>
+                    <View style={{paddingHorizontal: 5, alignItems: 'center'}}>
                         <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.green, marginRight: 0, textAlign: 'center', marginVertical: 20}}>{software.title}</Text>
-                        <Text style={{fontSize:16, marginRight: 20, textAlign: 'center'}}>{software.description}</Text>        
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', 
-                            marginRight: 25, alignItems: 'center', minWidth: width - 150}}>
+                        <Text style={{fontSize:16, marginRight: 0, textAlign: 'center', backgroundColor: COLORS.white}}>{software.description}</Text>        
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between',
+                            maxHeight: 70, marginTop: 30, width: width - 10, paddingHorizontal: 20,
+                            marginRight: 0, alignItems: 'center'}}>
                             <View style={{backgroundColor: COLORS.green, marginRight: 0, marginVertical: 10, borderRadius: 40, padding: 5, minWidth: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}>
                                 <ShowDownloadIicon id={software.id} link={software.file}/>
                             </View>
@@ -160,7 +161,7 @@ export default function SoftwaresScreen({ navigation, route }) {
     return (
         <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white, minHeight: 650}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 <View style={{
                     width: 60,
                     height: 60,
@@ -181,7 +182,15 @@ export default function SoftwaresScreen({ navigation, route }) {
                     marginHorizontal: 10
                 }}
                 data={software_list} 
-                renderItem={({item}) => <Card software={item}/>}/>)}
+                renderItem={({item}) => <Card software={item}/>}
+                ListFooterComponent={
+                    <View></View>
+                }
+                ListFooterComponentStyle={{ marginBottom: 50}}                
+                ListEmptyComponent={<Text style={{
+                    textAlign: 'center', fontSize: 18, fontWeight: '500', borderColor: COLORS.green, color: COLORS.green,
+                    borderRadius: 5, borderWidth: 2, padding: 15, margin: 15}}>Data Not Found</Text>}
+                />)}
             {loading && (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 150}}>
                     <LottieView source={require('../../assets/98657-loader.json')} 
