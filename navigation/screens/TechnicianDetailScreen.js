@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import call from 'react-native-phone-call';
 import { DOMAIN_NAME } from '../../sample-data/constants';
 
-const width = Dimensions.get('screen').width - 40
+const width = Dimensions.get('window').width - 40
 
 const app_logo = require('../../assets/app.png')
 
@@ -31,7 +31,7 @@ export default function TechnicianDetailScreen({ navigation, route }) {
         <SafeAreaView style={{marginTop: 50,}}>
             <View style={style.header}>
                 <TouchableOpacity activeOpacity={.5}>
-                    <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>Sami-Dish</Text>
+                    <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 </TouchableOpacity>
                 
                 <View style={{
@@ -45,7 +45,7 @@ export default function TechnicianDetailScreen({ navigation, route }) {
             </View>
             <View style={{flex: 0, flexDirection: 'row', margin: 5}}>
             <View style={style.productCard}>
-                <TouchableOpacity style={{backgroundColor: COLORS.green, margin: 5, width: 40}} activeOpacity={.7}
+                <TouchableOpacity style={{backgroundColor: COLORS.green, margin: 5, width: 35}} activeOpacity={.7}
                     onPressOut={() => {
                         navigation.navigate('RegionTechnicians', { city_id: technician.city.id, region_id: technician.region.id})
                         }}>
@@ -55,13 +55,14 @@ export default function TechnicianDetailScreen({ navigation, route }) {
                     height: width -48,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginTop: 50,
+                    marginTop: -30,
                     width: width -48,
                     borderRadius: width -48,
                     borderWidth: 1,
                     alignSelf: 'center',
                     borderColor: COLORS.white,
                     padding: 1,
+                    paddingVertical: -1
                 }}>
                     <Image style={{ flex: 1, resizeMode: 'contain', width: width - 50, height: width - 50,
                         borderRadius: width - 50, borderWidth: .51, borderColor: COLORS.white}} 
@@ -69,10 +70,11 @@ export default function TechnicianDetailScreen({ navigation, route }) {
                 </View>
                 
                 <Text style={{ fontSize: 28, fontWeight: 'bold', color: COLORS.white, textAlign: 'center', paddingTop: 15}}>{technician.first_name +' '+ technician.middle_name}</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 20, fontWeight: '500', textAlign: 'center'}}>{technician.region? technician.region.title: ''}</Text>
-                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 30, fontWeight: '300', textAlign: 'center'}}>{technician.city? technician.city.title: ''}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 5, fontWeight: '500', textAlign: 'center'}}>{technician.region? technician.region.title: ''}</Text>
+                <Text style={{color: COLORS.white, fontSize: 18, marginTop: 5, fontWeight: '300', textAlign: 'center'}}>{technician.city? technician.city.title: ''}</Text>
                 
-                <TouchableOpacity onPress={() => forwardToCall('+251964359872')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableOpacity onPress={() => forwardToCall('+251964359872')} style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+                    backgroundColor: COLORS.green, marginHorizontal: 25, maxHeight: 70}}>
                     <Icon name='phone' size={30} color={COLORS.white}/>
                     <Text style={{color: COLORS.white, fontSize: 22, fontWeight: '500', textAlign: 'center', paddingLeft: 5}}>{technician.phone}</Text>
                 </TouchableOpacity>
@@ -96,7 +98,7 @@ const style = StyleSheet.create({
         backgroundColor: COLORS.green,
         width,
         marginVertical: 10,
-        height: Dimensions.get('window').height - 160,
+        height: Dimensions.get('window').height - 210,
         marginBottom: 10 ,
         marginLeft: 15,
         borderRadius: 10
