@@ -51,7 +51,7 @@ const ProductDetailScreen = ({navigation, route}) => {
         marginTop: 20
       }}>
       <View style={style.header}>
-        <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+        <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
         <View style={{
                     width: 60,
                     height: 60,

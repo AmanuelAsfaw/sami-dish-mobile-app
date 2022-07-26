@@ -8,7 +8,7 @@ import axios from 'axios';
 import { DOMAIN_NAME, FETCH_HOME_PRODUCT_LIST, FETCH_HOME_SEARCH_PRODUCT_LIST } from '../../sample-data/constants';
 import LottieView from 'lottie-react-native'
 
-const width = Dimensions.get('screen').width
+const width = Dimensions.get('window').width
 
 const app_logo = require('../../assets/app.png')
 
@@ -136,7 +136,7 @@ export default function CategoryScreen({ navigation, route }) {
     return (
         <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 <View style={{
                     width: 60,
                     height: 60,
@@ -178,6 +178,10 @@ export default function CategoryScreen({ navigation, route }) {
                 ListEmptyComponent={<Text style={{
                     textAlign: 'center', fontSize: 18, fontWeight: '500', borderColor: COLORS.green, color: COLORS.green,
                     borderRadius: 5, borderWidth: 2, padding: 15, margin: 15}}>Data Not Found</Text>}
+                ListFooterComponent={
+                    <View></View>
+                }
+                ListFooterComponentStyle={{ marginBottom: 60}}
                 />)}
             {loading && (
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 150}}>

@@ -18,7 +18,7 @@ export default function NewsDetailScreen({ navigation, route }) {
         <SafeAreaView style={{marginTop: 50,}}>
             <ScrollView style={{marginBottom: 0}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 <View style={{
                     width: 60,
                     height: 60,

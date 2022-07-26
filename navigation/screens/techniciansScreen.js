@@ -8,7 +8,7 @@ import { DOMAIN_NAME, FETCH_TECHNICIANS_LIST } from '../../sample-data/constants
 
 import LottieView from 'lottie-react-native';
 
-const width = Dimensions.get('screen').width
+const width = Dimensions.get('window').width
 
 const app_logo = require('../../assets/app.png')
 
@@ -91,7 +91,7 @@ export default function TechniciansScreen({ navigation, route }) {
     return (
         <SafeAreaView style={{marginTop: 50, backgroundColor: COLORS.white}}>
             <View style={style.header}>
-                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>SamiDish</Text>
+                <Text style={{fontSize: 28, fontWeight: 'bold', color: COLORS.green}}>EthioDish</Text>
                 <View style={{
                     width: 60,
                     height: 60,
