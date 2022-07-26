@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Sami Dish",
-    "slug": "sami-dish",
-    "version": "1.0.0",
+    "name": "Ethio Dish",
+    "slug": "ethio_dish",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,15 +18,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-9062921533681065~1294382058"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#111111"
+        "backgroundColor": "#ffffff"
       },
-      "package": "info.samidish.samidish",
-      "versionCode": 1
+      "config": {       
+        "googleMobileAdsAppId": "ca-app-pub-9062921533681065~1294382058"
+      }
+      ,
+      "package": "info.ethiodish.ethiodish",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
