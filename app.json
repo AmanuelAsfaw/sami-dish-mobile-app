@@ -30,10 +30,10 @@
       },
       "config": {       
         "googleMobileAdsAppId": "ca-app-pub-9062921533681065~1294382058"
-      }
-      ,
+      },
+      "blockedPermissions": ["ACCESS_BACKGROUND_LOCATION"],
       "package": "info.ethiodish.ethiodish",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
